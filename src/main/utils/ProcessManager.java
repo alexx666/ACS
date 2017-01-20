@@ -37,13 +37,12 @@ public abstract class ProcessManager {
 					System.out.println("[acs-#] barnyard2 started");
 				}
 			}else{
-				if (!isActive(name)) { 
+				if (!isActive(name) || name == "tools") { //TODO improve, make more generic
+					System.out.println("[acs-#] starting: " + name);
 					if (!main.equals("")) { 
 						main += "&& " + calls.get(name) + " "; 
-						System.out.println("[acs-#] starting: " + name);
 					}else{ 
 						main += calls.get(name) + " "; 
-						System.out.println("[acs-#] starting: " + name);
 					}
 				}
 			}			
