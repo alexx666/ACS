@@ -5,12 +5,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import main.Processes;
 import main.dao.ProfileDao;
 import main.dao.SnapshotDao;
 import main.entities.Alert;
 import main.entities.Anomaly;
 import main.entities.Statistics;
 import main.utils.DataBaseConnection;
+import main.utils.ProcessManager;
 import main.utils.RunnableTask;
 import main.utils.Task;
 
@@ -21,9 +23,7 @@ public class AlertHandler extends Task implements RunnableTask {
 
 	private volatile boolean running;
 	
-	private BufferedReader in;
-	
-	private PradsController prads;
+	private BufferedReader in;	
 	
 	private DataBaseConnection dbCon;
 	private ProfileDao profileDao;
@@ -33,7 +33,6 @@ public class AlertHandler extends Task implements RunnableTask {
 	private Statistics snapshot;
 	
 	public AlertHandler() {
-		this.prads = new PradsController();
 		this.dbCon = new DataBaseConnection("cxtracker", "cxtracker", "cxtracker");
 	}
 	
@@ -48,7 +47,7 @@ public class AlertHandler extends Task implements RunnableTask {
 		this.profileDao = new ProfileDao(dbCon.getConn());
 		this.snapshotDao = new SnapshotDao(dbCon.getConn());
 		
-		prads.start();
+		ProcessManager.start(Processes.SNAPSHOT2DB, Processes.PRADS);
 		
 		System.out.println();
 				
@@ -70,7 +69,7 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					sleep(100); //give prads a little time to save connections
 					
-					PradsController.stopPrads();
+					ProcessManager.stop(Processes.PRADS);
 					
 					/* EXTRACT PROFILE DATA */
 					if (profileDao.isProfileDataEnough()) {
@@ -97,7 +96,7 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					System.out.print(" ---> Network ANOMALY of: " + Math.round((new Anomaly(profile, snapshot)).getAnomaly()) + "/100");
 	
-					PradsController.startPrads();
+					ProcessManager.start(Processes.PRADS);
 				}
 			}
 		}catch (IOException ex) {
@@ -113,6 +112,6 @@ public class AlertHandler extends Task implements RunnableTask {
 
 	public void stop() {
 		running = false;
-		prads.stop();
+		ProcessManager.stop(Processes.SNAPSHOT2DB, Processes.PRADS);
 	}
 }
