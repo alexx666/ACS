@@ -65,8 +65,8 @@ public class StreamHandler extends Task implements RunnableTask {
 	    }finally{
 	    	try { 
 	    		bufferedReader.close(); 
-	    	}catch (IOException ex) {
-	    		LOGGER.info("SQLException: " + ex.getMessage());
+	    	}catch (IOException e) {
+	    		LOGGER.info("SQLException: " + e.getMessage());
 	    	}
 	    	synchronized (lock) { 
 	    		lock.notify();

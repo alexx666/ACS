@@ -26,12 +26,13 @@ public class DataBaseConnection {
 	/**
 	 * Connects to the db
 	 * @return the connection so it can be passed to a different method for queries
+	 * @throws SQLException 
 	 */
 	public void connect() {
 		try {
-		    conn = DriverManager.getConnection(connection);
-		} catch (SQLException ex) {
-			LOGGER.info("SQLException: " + ex.getMessage());
+			conn = DriverManager.getConnection(connection);
+		} catch (SQLException e) {
+			LOGGER.info("SQLException: " + e.getMessage());
 		}
 	}
 	
@@ -39,8 +40,7 @@ public class DataBaseConnection {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info("SQLException: " + e.getMessage());
 		}
 	}
 

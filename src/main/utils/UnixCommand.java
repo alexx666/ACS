@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
-
-
 public class UnixCommand {
 	
 	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
@@ -35,8 +33,8 @@ public class UnixCommand {
 				}
 				output = stream.getOutputBuffer();
 			}
-		}catch(IOException ex) { 
-			LOGGER.info("Exception: " + ex.getMessage());
+		}catch(IOException e) { 
+			LOGGER.info("Exception: " + e.getMessage());
 		}
 	}
 }

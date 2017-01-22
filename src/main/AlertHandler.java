@@ -46,10 +46,10 @@ public class AlertHandler extends Task implements RunnableTask {
 		this.profileDao = new ProfileDao(dbCon.getConn());
 		this.snapshotDao = new SnapshotDao(dbCon.getConn());
 		
-		ProcessManager.start(Commands.SNAPSHOT2DB, Commands.PRADS);
+		ProcessManager.start(Commands.BARNYARD2, Commands.SURICATA, Commands.SNAPSHOT2DB, Commands.PRADS);
 		
-		System.out.println();
-				
+		System.out.println("[acs] Listening...");
+						
 		try {
 			
 			in = new BufferedReader(new FileReader(FIFO));
@@ -64,11 +64,11 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					Alert alert = new Alert(line);
 					
-					System.out.print("[acs-1] Alert recieved: " + alert.getMessage() + " at: [UTC] " + alert.getDate());
+					System.out.print("[acs][1] Alert recieved: " + alert.getMessage() + " at: [UTC] " + alert.getDate());
 					
 					sleep(100); //give prads a little time to save connections
 					
-					ProcessManager.stop(Commands.PRADS);
+					ProcessManager.silentStop(Commands.PRADS);
 					
 					/* EXTRACT PROFILE DATA */
 					if (profileDao.isProfileDataEnough()) {
@@ -95,7 +95,7 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					System.out.print(" ---> Network ANOMALY of: " + Math.round((new Anomaly(profile, snapshot)).getAnomaly()) + "/100");
 	
-					ProcessManager.start(Commands.PRADS);
+					ProcessManager.silentStart(Commands.PRADS);
 				}
 			}
 		}catch (IOException ex) {
@@ -111,6 +111,7 @@ public class AlertHandler extends Task implements RunnableTask {
 
 	public void stop() {
 		running = false;
-		ProcessManager.stop(Commands.SNAPSHOT2DB, Commands.PRADS);
+		ProcessManager.stop(Commands.BARNYARD2, Commands.SURICATA, Commands.SNAPSHOT2DB, Commands.PRADS);
+		System.out.println("[acs] Monitor has been interrupted.");
 	}
 }

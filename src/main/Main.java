@@ -12,15 +12,14 @@ public class Main {
 	public Main() {
 
 		this.sc = new Scanner(System.in);
+		sc.useDelimiter("[;\r\n]+");
 		this.ah = new AlertHandler();
 
 		System.out.println();
 		System.out.println("############################################");
 		System.out.println("#         Alert Correlation System         #");
 		System.out.println("############################################");
-		System.out.println();
 		manage(Options.HELP);
-		System.out.println();
 		run();
 	}
 
@@ -29,8 +28,7 @@ public class Main {
 	}
 
 	private void run() {
-
-		System.out.print("[acs-#]: ");
+		System.out.print("[acs]: ");
 
 		switch (sc.next()) {
 		case "1": manage(Options.NIDS); break;
@@ -38,8 +36,8 @@ public class Main {
 		case "3": manage(Options.RULES); break;
 		case "v": manage(Options.VERSIONS); break;
 		case "f": manage(Options.FILES); break;
-		case "s": break;
 		case "h": manage(Options.HELP); break;
+		case "s": break;
 		default: manage(Options.HELP); break;
 		}
 		
@@ -61,35 +59,32 @@ public class Main {
 	private void manage(Options option) {
 		switch (option){
 		case NIDS:
-			ProcessManager.start(Commands.BARNYARD2, Commands.SURICATA);
 			ah.start();
-			System.out.println();
 			if (!sc.next().contentEquals("s"));
 			ah.stop();
-			ProcessManager.stop(Commands.BARNYARD2, Commands.SURICATA);
-			System.out.println("[acs-1] Monitor has been interrupted.");
 			break;
 		case PROFILES:
 			ProcessManager.start(Commands.PROFILE2DB, Commands.CXTRACKER);
-			System.out.print("[acs-2] Profiler is running. Insert any input to stop profiling: ");
+			System.out.print("[acs] Profiler is running. Insert any input to stop profiling: ");
 			if (!sc.next().contentEquals("s"));
 			ProcessManager.stop(Commands.CXTRACKER, Commands.PROFILE2DB);
-			System.out.println("[acs-2] Profiler has been interrupted.");
+			System.out.println("[acs] Profiler has been interrupted.");
 			break;
 		case RULES:
-			System.out.println("[acs-3] Updating rules, please wait...");
+			System.out.println("[acs] Updating rules, please wait...");
 			ProcessManager.start(Commands.OINKMASTER);
-			System.out.println("[acs-3] Update finnished.");
+			System.out.println("[acs] Update finnished.");
 			break;
 		case VERSIONS:
-			System.out.println("[acs-v] Listing tool versions, please wait...");
+			System.out.println("[acs] Listing tool versions, please wait...");
 			ProcessManager.start(Commands.VERSION_SURICATA, Commands.VERSION_OINKMASTER, Commands.VERSION_BARNUARD2);
 			break;
 		case FILES:
-			System.out.println("[acs-f] Listing configuration files, please wait...");
+			System.out.println("[acs] Listing configuration files, please wait...");
 			ProcessManager.start(Commands.FILE_SURICATA, Commands.FILE_OINKMASTER, Commands.FILE_BARNUARD2);
 			break;
-		case HELP: 
+		case HELP:
+			System.out.println();
 			System.out.println("Select an option:");
 			System.out.println();
 			for (int i = 0; i < java.util.Arrays.asList(Options.values()).size(); i++) {
