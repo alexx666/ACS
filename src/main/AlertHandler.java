@@ -1,11 +1,10 @@
-package main.controllers;
+package main;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import main.Processes;
 import main.dao.ProfileDao;
 import main.dao.SnapshotDao;
 import main.entities.Alert;
@@ -47,7 +46,7 @@ public class AlertHandler extends Task implements RunnableTask {
 		this.profileDao = new ProfileDao(dbCon.getConn());
 		this.snapshotDao = new SnapshotDao(dbCon.getConn());
 		
-		ProcessManager.start(Processes.SNAPSHOT2DB, Processes.PRADS);
+		ProcessManager.start(Commands.SNAPSHOT2DB, Commands.PRADS);
 		
 		System.out.println();
 				
@@ -69,7 +68,7 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					sleep(100); //give prads a little time to save connections
 					
-					ProcessManager.stop(Processes.PRADS);
+					ProcessManager.stop(Commands.PRADS);
 					
 					/* EXTRACT PROFILE DATA */
 					if (profileDao.isProfileDataEnough()) {
@@ -96,7 +95,7 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					System.out.print(" ---> Network ANOMALY of: " + Math.round((new Anomaly(profile, snapshot)).getAnomaly()) + "/100");
 	
-					ProcessManager.start(Processes.PRADS);
+					ProcessManager.start(Commands.PRADS);
 				}
 			}
 		}catch (IOException ex) {
@@ -112,6 +111,6 @@ public class AlertHandler extends Task implements RunnableTask {
 
 	public void stop() {
 		running = false;
-		ProcessManager.stop(Processes.SNAPSHOT2DB, Processes.PRADS);
+		ProcessManager.stop(Commands.SNAPSHOT2DB, Commands.PRADS);
 	}
 }

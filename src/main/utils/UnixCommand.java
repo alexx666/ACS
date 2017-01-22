@@ -10,26 +10,19 @@ public class UnixCommand {
 	
 	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
 	
-	private List<String> commands;
-	private StreamHandler stream;
 	private StringBuffer output;
-		
-	public UnixCommand(List<String> commands) {
-		this.commands = commands;
-	}
 	
-	public StringBuffer getOutput() {
-		return output;
-	}
-
-	public void execute(boolean print, boolean out) {
-		output = new StringBuffer();
-		try {
+	public UnixCommand() {}
+	
+	public StringBuffer getOutput() { return output; }
+		
+	public void execute(List<String> commands, boolean print, boolean out) {
+		try {			
 			ProcessBuilder pb = new ProcessBuilder(commands);
 			pb.redirectErrorStream(true);
 			Process p = pb.start();
 			
-			stream = new StreamHandler(p.getInputStream(), p.getOutputStream(), "n\"\"DL3", this, print, out);
+			StreamHandler stream = new StreamHandler(p.getInputStream(), p.getOutputStream(), "n\"\"DL3", this, print, out);
 			stream.start();
 		
 			if (out) {
