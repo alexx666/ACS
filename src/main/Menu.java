@@ -4,12 +4,12 @@ import java.util.Scanner;
 
 import main.utils.ProcessManager;
 
-public class Main {
+public class Menu {
 
 	private Scanner sc;
 	private AlertHandler ah;
 
-	public Main() {
+	public Menu() {
 
 		this.sc = new Scanner(System.in);
 		sc.useDelimiter("[;\r\n]+");
@@ -24,7 +24,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		new Main();
+		new Menu();
 	}
 
 	private void run() {
@@ -77,11 +77,11 @@ public class Main {
 			break;
 		case VERSIONS:
 			System.out.println("[acs] Listing tool versions, please wait...");
-			ProcessManager.start(Commands.VERSION_SURICATA, Commands.VERSION_OINKMASTER, Commands.VERSION_BARNUARD2);
+			ProcessManager.start(Commands.VERSION_SURICATA, Commands.VERSION_OINKMASTER);
 			break;
 		case FILES:
 			System.out.println("[acs] Listing configuration files, please wait...");
-			ProcessManager.start(Commands.FILE_SURICATA, Commands.FILE_OINKMASTER, Commands.FILE_BARNUARD2);
+			ProcessManager.start(Commands.FILE_SURICATA, Commands.FILE_OINKMASTER);
 			break;
 		case HELP:
 			System.out.println();

@@ -46,7 +46,7 @@ public class AlertHandler extends Task implements RunnableTask {
 		this.profileDao = new ProfileDao(dbCon.getConn());
 		this.snapshotDao = new SnapshotDao(dbCon.getConn());
 		
-		ProcessManager.start(Commands.BARNYARD2, Commands.SURICATA, Commands.SNAPSHOT2DB, Commands.PRADS);
+		ProcessManager.start(Commands.SURICATA, Commands.SNAPSHOT2DB, Commands.PRADS);
 		
 		System.out.println("[acs] Listening...");
 						
@@ -68,7 +68,7 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					sleep(100); //give prads a little time to save connections
 					
-					ProcessManager.silentStop(Commands.PRADS);
+					ProcessManager.start(Commands.PRADS);
 					
 					/* EXTRACT PROFILE DATA */
 					if (profileDao.isProfileDataEnough()) {
@@ -95,7 +95,7 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					System.out.print(" ---> Network ANOMALY of: " + Math.round((new Anomaly(profile, snapshot)).getAnomaly()) + "/100");
 	
-					ProcessManager.silentStart(Commands.PRADS);
+					ProcessManager.start(Commands.PRADS);
 				}
 			}
 		}catch (IOException ex) {
@@ -111,7 +111,7 @@ public class AlertHandler extends Task implements RunnableTask {
 
 	public void stop() {
 		running = false;
-		ProcessManager.stop(Commands.BARNYARD2, Commands.SURICATA, Commands.SNAPSHOT2DB, Commands.PRADS);
+		ProcessManager.stop(Commands.SURICATA, Commands.SNAPSHOT2DB, Commands.PRADS);
 		System.out.println("[acs] Monitor has been interrupted.");
 	}
 }
