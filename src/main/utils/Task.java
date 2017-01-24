@@ -2,21 +2,46 @@ package main.utils;
 
 public abstract class Task implements Runnable {
 	
-	private Thread t;
+	private Thread thread;
+	private Object lock;
+	private boolean synced;
+	
+	public Task() {
+		this.thread = null;
+		this.synced = false;
+		this.lock = null;
+	}
+	
+	public Task(boolean synced, Object lock) {
+		this.thread = null;
+		this.synced = synced;
+		this.lock = lock;
+	}
+	
+	public abstract void sync(Object lock);
+	public abstract void async();
 	
 	@Override
-	public void run() {	/* code to run */ }
+	public void run() {	
+		if (synced) {
+			sync(lock);
+		}else{
+			async();
+		}
+	}
 
 	public void start() {
-		if (t == null || !t.isAlive()) {
-			t = new Thread(this);
-			t.start();	
+		if (thread == null || !thread.isAlive()) {
+			thread = new Thread(this);
+			thread.start();	
 		}
 	}
 	
 	public void sleep(long time) {
-		if (t != null && t.isAlive()) {
+		if (thread != null && thread.isAlive()) {
 			try { Thread.sleep(time); } catch (InterruptedException e) {/*ignored*/}
 		}
 	}
+	
+	public abstract void stop();
 }

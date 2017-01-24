@@ -1,6 +1,7 @@
 package main.dao;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,21 +16,27 @@ public class SnapshotDao {
 	
 	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
 	
-	private Connection connection;
-	private Statement stmt = null;
-	private ResultSet rs = null;
-	private Statistics snapshot = null;
-	
-	public SnapshotDao(Connection connection) { this.connection = connection; }
+	private String db;
+	private String user;
+	private String pass;
+			
+	public SnapshotDao(String db, String user, String pass) {
+		this.db = db;
+		this.user = user;
+		this.pass = pass;
+	}
 
 	public Statistics getSnapshot(String time) {
-		String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from snapshot_session_nidslinux_VirtualBox where end_time >= '" + time + "';";
 		try {
-		    stmt = connection.createStatement();
+
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+db+"?user="+user+"&password="+pass);
+	
+			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from snapshot_session_nidslinux_VirtualBox where end_time >= '" + time + "';";
+		    Statement stmt = connection.createStatement();
 		    if (stmt.execute(query)) {
 		        List<Flow> cons = new ArrayList<Flow>();
 		        
-		        rs = stmt.getResultSet();
+		        ResultSet rs = stmt.getResultSet();
 		        
 		        while(!rs.isLast()) {
 		        	rs.next();
@@ -49,59 +56,50 @@ public class SnapshotDao {
 					
 					cons.add(f);
 		        }
- 
-		        snapshot = new Statistics(cons);
+		        rs.close();
+	    		stmt.close();
+	    		connection.close();
+				return new Statistics(cons);
+		    }else{
+	    		stmt.close();
+	    		connection.close();
+		    	return null;
 		    }
 		}catch (SQLException ex){ 
-//			LOGGER.warning("SQLException: " + ex.getMessage()); 
-		}finally {
-		    if (rs != null) { 
-		    	try { 
-		    		rs.close(); 
-		    	} catch (SQLException sqlEx) { 
-		    		LOGGER.warning(sqlEx.getMessage()); 
-		    	} 
-		    	rs = null; 
-		    }
-		    if (stmt != null) { 
-		    	try { 
-		    		stmt.close(); 
-		    	} catch (SQLException sqlEx) { 
-		    		LOGGER.warning(sqlEx.getMessage()); 
-		    	} 
-		    	stmt = null; 
-		    }
+			LOGGER.warning("SQLException: " + ex.getMessage()); 
+			return null;
 		}
-		return snapshot;
 	}
 	
 	public boolean isSnapshotReady(String time) {
-		String query = "select count(*) from snapshot_session_nidslinux_VirtualBox where end_time >= '" + time + "';";
 		try {
-		    stmt = connection.createStatement();
+
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+db+"?user="+user+"&password="+pass);
+	
+			String query = "select count(*) from snapshot_session_nidslinux_VirtualBox where end_time >= '" + time + "';";
+		    Statement stmt = connection.createStatement();
 		    if (stmt.execute(query)) {
-		    	rs = stmt.getResultSet();
+		    	ResultSet rs = stmt.getResultSet();
 		    	rs.next();
 		    	if (rs.getInt("count(*)") > 0) {
+		    		rs.close();
+		    		stmt.close();
+		    		connection.close();
 			    	return true;
 		    	}else{
+		    		rs.close();
+		    		stmt.close();
+		    		connection.close();
 		    		return false;
 		    	}
 		    }else{
+	    		stmt.close();
+	    		connection.close();
 		    	return false;
 		    }
 		}catch (SQLException ex){ 
 			LOGGER.warning(ex.getMessage());
 			return false;
-		}finally{
-			if (stmt != null) { 
-		    	try { 
-		    		stmt.close(); 
-		    	} catch (SQLException sqlEx) { 
-		    		LOGGER.warning(sqlEx.getMessage()); 
-		    	} 
-		    	stmt = null; 
-		    }
 		}
 	}
 }

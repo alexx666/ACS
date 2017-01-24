@@ -18,7 +18,7 @@ public enum Commands {
 	CXTRACKER ("cxtracker", "sudo -S cxtracker -i eth2 -d /var/log/cxtracker/eth2/sessions/ -D", true),
 	OINKMASTER ("oinkmaster", "sudo -S oinkmaster -o /etc/suricata/rules -s", true),
 	SNAPSHOT2DB ("snapshot2db.pl", "sudo -S snapshot2db.pl eth2 --dir /var/log/prads/eth2/sessions/ --daemon", true),
-	PRADS ("prads", "sudo -S prads -i eth2 -L /var/log/prads/eth2/sessions/ -q -D", true),
+	PRADS ("prads", "sudo -S prads -i eth2 -L /var/log/prads/eth2/sessions/ -x -O -D", true),
 	SURICATA ("Suricata-Main", "sudo -S suricata -c /etc/suricata/suricata.yaml --pcap=eth1 -D", true),
 	/* CONFIG FILE LOCATIONS */
 	//FILE_BARNUARD2 ("barnyard2", "locate 'barnyard2.conf'", false),

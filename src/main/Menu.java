@@ -2,18 +2,14 @@ package main;
 
 import java.util.Scanner;
 
-import main.utils.ProcessManager;
 
 public class Menu {
 
-	private Scanner sc;
-	private AlertHandler ah;
+	private Scanner sc; //TODO user arguments instead
 
 	public Menu() {
 
 		this.sc = new Scanner(System.in);
-		sc.useDelimiter("[;\r\n]+");
-		this.ah = new AlertHandler();
 
 		System.out.println();
 		System.out.println("############################################");
@@ -43,12 +39,12 @@ public class Menu {
 		
 		System.out.println();
 		System.out.println("############################################");
-		System.out.println("#                 Bye Bye!                 #");
+		System.out.println("#            Exiting : Bye Bye!            #");
 		System.out.println("############################################");
 		System.out.println();
 		
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -57,31 +53,36 @@ public class Menu {
 	}
 
 	private void manage(Options option) {
+		Commands [] cmds;
 		switch (option){
 		case NIDS:
+			cmds = new Commands[]{Commands.SURICATA, Commands.SNAPSHOT2DB, Commands.PRADS};
+			AlertHandler ah = new AlertHandler();
+			ProcessManager.start(cmds, true);
 			ah.start();
 			if (!sc.next().contentEquals("s"));
 			ah.stop();
+			ProcessManager.stop(cmds, true);
 			break;
 		case PROFILES:
-			ProcessManager.start(Commands.PROFILE2DB, Commands.CXTRACKER);
-			System.out.print("[acs] Profiler is running. Insert any input to stop profiling: ");
+			cmds = new Commands[]{Commands.PROFILE2DB, Commands.CXTRACKER};
+			ProcessManager.start(cmds, true);
 			if (!sc.next().contentEquals("s"));
-			ProcessManager.stop(Commands.CXTRACKER, Commands.PROFILE2DB);
-			System.out.println("[acs] Profiler has been interrupted.");
+			ProcessManager.stop(cmds, true);
 			break;
 		case RULES:
+			cmds = new Commands[]{Commands.OINKMASTER};
 			System.out.println("[acs] Updating rules, please wait...");
-			ProcessManager.start(Commands.OINKMASTER);
+			ProcessManager.start(cmds, true);
 			System.out.println("[acs] Update finnished.");
 			break;
 		case VERSIONS:
-			System.out.println("[acs] Listing tool versions, please wait...");
-			ProcessManager.start(Commands.VERSION_SURICATA, Commands.VERSION_OINKMASTER);
+			cmds = new Commands[]{Commands.VERSION_SURICATA, Commands.VERSION_OINKMASTER};
+			ProcessManager.start(cmds, true);
 			break;
 		case FILES:
-			System.out.println("[acs] Listing configuration files, please wait...");
-			ProcessManager.start(Commands.FILE_SURICATA, Commands.FILE_OINKMASTER);
+			cmds = new Commands[]{Commands.FILE_SURICATA, Commands.FILE_OINKMASTER};
+			ProcessManager.start(cmds, true);
 			break;
 		case HELP:
 			System.out.println();

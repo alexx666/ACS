@@ -10,49 +10,36 @@ import main.dao.SnapshotDao;
 import main.entities.Alert;
 import main.entities.Anomaly;
 import main.entities.Statistics;
-import main.utils.DataBaseConnection;
-import main.utils.ProcessManager;
-import main.utils.RunnableTask;
 import main.utils.Task;
 
-public class AlertHandler extends Task implements RunnableTask {
+public class AlertHandler extends Task {
 
 	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
-	private static final String FIFO = "/var/log/suricata/fast.pipe";
+	private static final String FIFO = "/var/log/suricata/fast.pipe"; //TODO create pipe here!
 
 	private volatile boolean running;
-	
-	private BufferedReader in;	
-	
-	private DataBaseConnection dbCon;
-	private ProfileDao profileDao;
-	private SnapshotDao snapshotDao;
-	
+			
 	private Statistics profile;
 	private Statistics snapshot;
 	
 	public AlertHandler() {
-		this.dbCon = new DataBaseConnection("cxtracker", "cxtracker", "cxtracker");
+		super();
 	}
 	
-	public void run() { async(); }
-
 	@Override
 	public void async() {
 		
 		running = true;
 		
-		this.dbCon.connect();
-		this.profileDao = new ProfileDao(dbCon.getConn());
-		this.snapshotDao = new SnapshotDao(dbCon.getConn());
-		
-		ProcessManager.start(Commands.SURICATA, Commands.SNAPSHOT2DB, Commands.PRADS);
+		ProfileDao profileDao = new ProfileDao("cxtracker","cxtracker","cxtracker");
+		SnapshotDao snapshotDao = new SnapshotDao("cxtracker","cxtracker","cxtracker");
 		
 		System.out.println("[acs] Listening...");
 						
 		try {
 			
-			in = new BufferedReader(new FileReader(FIFO));
+			Commands [] cmds = new Commands[]{Commands.PRADS};
+			BufferedReader in = new BufferedReader(new FileReader(FIFO));
 			
 			while (running) {
 				
@@ -64,11 +51,12 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					Alert alert = new Alert(line);
 					
-					System.out.print("[acs][1] Alert recieved: " + alert.getMessage() + " at: [UTC] " + alert.getDate());
+					System.out.println();
+					System.out.print("[acs] Alert recieved: " + alert.getMessage() + " at: [UTC] " + alert.getDate());
 					
-					sleep(100); //give prads a little time to save connections
+					sleep(100); //TODO give prads a little time to save connections ??
 					
-					ProcessManager.start(Commands.PRADS);
+					ProcessManager.stop(cmds, false);
 					
 					/* EXTRACT PROFILE DATA */
 					if (profileDao.isProfileDataEnough()) {
@@ -95,23 +83,22 @@ public class AlertHandler extends Task implements RunnableTask {
 					
 					System.out.print(" ---> Network ANOMALY of: " + Math.round((new Anomaly(profile, snapshot)).getAnomaly()) + "/100");
 	
-					ProcessManager.start(Commands.PRADS);
+					ProcessManager.start(cmds, false);
 				}
 			}
+			
+			in.close();
 		}catch (IOException ex) {
 			LOGGER.warning(ex.getMessage());
 			System.exit(-1);
-		}finally{
-			dbCon.close();
 		}
 	}
-
+	
 	@Override
-	public void sync(Object lock) {/* ignored */}
-
+	public void sync(Object lock) {}
+	
+	@Override
 	public void stop() {
 		running = false;
-		ProcessManager.stop(Commands.SURICATA, Commands.SNAPSHOT2DB, Commands.PRADS);
-		System.out.println("[acs] Monitor has been interrupted.");
 	}
 }
