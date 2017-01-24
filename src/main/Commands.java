@@ -10,13 +10,13 @@ package main;
  * NOTE: process - indicates that a process is created after execution
  * 		 print - true if you want the output of the command to be printed on console
  * 		 output - true if you want the output to be saved for later use or for other processes
- * */
+ **/
 public enum Commands {
 	/* RUNNABLE PROCESSES */
 	//BARNYARD2 ("barnyard2", "sudo -S barnyard2 -c /etc/suricata/barnyard2.conf -d /var/log/suricata -f unified2.alert -w /var/log/suricata/suricata.waldo -D", true, false, false),
 	PROFILE2DB ("profile2db.pl", "sudo -S profile2db.pl eth2 --dir /var/log/cxtracker/eth2/sessions/ --daemon", true),
 	CXTRACKER ("cxtracker", "sudo -S cxtracker -i eth2 -d /var/log/cxtracker/eth2/sessions/ -D", true),
-	OINKMASTER ("oinkmaster", "sudo -S oinkmaster -o /etc/suricata/rules -s", true),
+	OINKMASTER ("oinkmaster", "sudo -S oinkmaster -o /etc/suricata/rules -s", false),
 	SNAPSHOT2DB ("snapshot2db.pl", "sudo -S snapshot2db.pl eth2 --dir /var/log/prads/eth2/sessions/ --daemon", true),
 	PRADS ("prads", "sudo -S prads -i eth2 -L /var/log/prads/eth2/sessions/ -x -O -D", true),
 	SURICATA ("Suricata-Main", "sudo -S suricata -c /etc/suricata/suricata.yaml --pcap=eth1 -D", true),
