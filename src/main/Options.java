@@ -1,5 +1,5 @@
 package main;
-
+//TODO usar args[0]
 public enum Options {
 	NIDS{
         @Override
@@ -17,18 +17,6 @@ public enum Options {
         @Override
         public String toString() {
             return "3 - to update Suricata rules";
-        }
-    },
-	VERSIONS{
-        @Override
-        public String toString() {
-            return "v - to see the tools used";
-        }
-    },
-	FILES{
-        @Override
-        public String toString() {
-            return "f - to see configuration file locations";
         }
     },
 	HELP{

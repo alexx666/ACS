@@ -7,21 +7,9 @@ public class Statistics {
 	
 	private List<Flow> connections;
 
-	public Statistics(List<Flow> connections) {
-		this.connections = connections;
-	}
-	
-	public String flowsToString() {
-		String result = "";
-		for(Flow f : connections) {
-			result += f.flowToString() + "\n";
-		}
-		return result;
-	}
-	
-	public int getNumberOfConnections() {
-		return connections.size();
-	}
+	public Statistics(List<Flow> connections) {	this.connections = connections; }
+		
+	public int getNumberOfConnections() { return connections.size(); }
 
 	public List<String> getSrcIps() {
 		List<String> ips = new ArrayList<String>();
@@ -111,5 +99,11 @@ public class Statistics {
 			dur += connection.getDuration();
 		}
 		return dur/connections.size();
+	}
+	
+	public String flowsToString() {
+		String result = "";
+		for(Flow f : connections) {	result += f.flowToString() + "\n"; }
+		return result;
 	}
 }

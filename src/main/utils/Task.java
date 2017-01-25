@@ -20,15 +20,7 @@ public abstract class Task implements Runnable {
 	
 	public abstract void sync(Object lock);
 	public abstract void async();
-	
-	@Override
-	public void run() {	
-		if (synced) {
-			sync(lock);
-		}else{
-			async();
-		}
-	}
+	public abstract void stop();
 
 	public void start() {
 		if (thread == null || !thread.isAlive()) {
@@ -39,9 +31,14 @@ public abstract class Task implements Runnable {
 	
 	public void sleep(long time) {
 		if (thread != null && thread.isAlive()) {
-			try { Thread.sleep(time); } catch (InterruptedException e) {/*ignored*/}
+			try { Thread.sleep(time); } 
+			catch (InterruptedException e) { e.printStackTrace(); }
 		}
 	}
 	
-	public abstract void stop();
+	@Override
+	public void run() {	
+		if (synced) { sync(lock);}
+		else { async();	}
+	}
 }

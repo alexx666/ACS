@@ -10,55 +10,49 @@ import main.dao.SnapshotDao;
 import main.entities.Alert;
 import main.entities.Anomaly;
 import main.entities.Statistics;
+import main.utils.ProcessManager;
 import main.utils.Task;
 
 public class AlertHandler extends Task {
 
 	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
-	private static final String FIFO = "/var/log/suricata/fast.pipe"; //TODO create pipe here!
+	private static final String FIFO = "/var/log/suricata/fast.pipe"; //TODO crear pipe en vez de meterlo a pelo
 
 	private volatile boolean running;
-			
-	private Statistics profile;
-	private Statistics snapshot;
 	
-	public AlertHandler() {
-		super();
-	}
+	public AlertHandler() {	super(); }
 	
 	@Override
 	public void async() {
 		
-		running = true;
-		
 		ProfileDao profileDao = new ProfileDao("cxtracker","cxtracker","cxtracker");
 		SnapshotDao snapshotDao = new SnapshotDao("cxtracker","cxtracker","cxtracker");
+		
+		Statistics profile = null;
+		Statistics snapshot = null;
+		
+		ProcessManager pm = new ProcessManager();
+
+		pm.setProcesses(ExternalProcess.PRADS);
+		running = true;
 		
 		System.out.println("[acs] Listening...");
 						
 		try {
-			
-			Commands [] cmds = new Commands[]{Commands.PRADS};
+	
 			BufferedReader in = new BufferedReader(new FileReader(FIFO));
 			
 			while (running) {
-				
 				String line;
-				
 				if ((line = in.readLine()) != null) {
-					
 					int counter = 0;
-					
 					Alert alert = new Alert(line);
-					
 					System.out.println();
 					System.out.print("[acs] Alert recieved: " + alert.getMessage() + " at: [UTC] " + alert.getDate());
 					
-					sleep(100); //TODO give prads a little time to save connections ??
-					
-					ProcessManager.stop(cmds, false);
-					
-					/* EXTRACT PROFILE DATA */
+					sleep(100);
+					pm.stop(false);
+
 					if (profileDao.isProfileDataEnough()) {
 						profile = profileDao.getProfile();
 					}else{
@@ -66,7 +60,6 @@ public class AlertHandler extends Task {
 						profile = profileDao.getFullProfile();
 					}
 					
-					/* WAIT FOR SNAPSHOT */
 					while(!snapshotDao.isSnapshotReady(alert.getDate()) && running) {
 						if (counter==20 && snapshot != null) {
 							System.out.print("[S]");
@@ -77,16 +70,13 @@ public class AlertHandler extends Task {
 					}
 					
 					if(!running) {break;}
-					
-					/* EXTRACT SNAPSHOT DATA */
 					snapshot = snapshotDao.getSnapshot(alert.getDate());
 					
 					System.out.print(" ---> Network ANOMALY of: " + Math.round((new Anomaly(profile, snapshot)).getAnomaly()) + "/100");
 	
-					ProcessManager.start(cmds, false);
+					pm.start(false);
 				}
 			}
-			
 			in.close();
 		}catch (IOException ex) {
 			LOGGER.warning(ex.getMessage());
@@ -98,7 +88,5 @@ public class AlertHandler extends Task {
 	public void sync(Object lock) {}
 	
 	@Override
-	public void stop() {
-		running = false;
-	}
+	public void stop() { running = false; }
 }

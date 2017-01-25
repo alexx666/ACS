@@ -1,4 +1,4 @@
-package main;
+package main.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,61 +9,64 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.ExternalProcess;
 
 public class ProcessManager {
 	
 	private static final String bash = "/bin/sh";
 	private static final String c = "-c";
+	
+	private ExternalProcess [] processes;
+	
+	public ProcessManager() {}
 			
-	public static void start(Commands[] cmds, boolean verbose) {						
-		for (Commands cmd : cmds) {
-			if(cmd.isProcess() && verbose) {
-				if (!isActive(cmd)) {
-					System.out.println("[acs] Starting: " + cmd.getName());
-				}else{
-					System.out.println("[acs]  " + cmd.getName() + " is already running");
+	public ExternalProcess[] getProcesses() { return processes;	}
+	public void setProcesses(ExternalProcess...processes) {	this.processes = processes;	}
+
+	public void start(boolean verbose) {						
+		for (ExternalProcess process : processes) {
+			if(!isActive(process)) {
+				if (verbose) {
+					System.out.println("[acs] Starting: " + process.getName());
 				}
-			}
-			if(cmd.isProcess() && !isActive(cmd) || !cmd.isProcess()) {
 				List<String> commands = new ArrayList<String>();
 				commands.add(bash);
 				commands.add(c);
-				commands.add(cmd.getCommand());
-				if(cmd.isProcess()) {
-					execute(commands, false); 
-				}else{
-					execute(commands, true); 
-				}
+				commands.add(process.getCommand());
+				runProcess(commands, verbose);
+			}else if(verbose){
+				System.out.println("[acs]  " + process.getName() + " is already running");
 			}
 		}
 	}
 	
-	public static void stop(Commands[] cmds, boolean verbose) {
-		for (Commands cmd : cmds) {
-			if(cmd.isProcess() && verbose) {
-				if(isActive(cmd)){
-					System.out.println("[acs] Stopping: " + cmd.getName());
+	public void stop(boolean verbose) {
+		if(processes.length != 0) {
+			for (ExternalProcess process : processes) {
+				if(isActive(process)) {
+					if(verbose){
+						System.out.println("[acs] Stopping: " + process.getName());
+					}
 					List<String> commands = new ArrayList<String>();
 					commands.add("sudo");
 					commands.add("-S");
 					commands.add("killall");
-					commands.add(cmd.getName());
-					execute(commands, false);
-				}else{
-					System.out.println("[acs] " + cmd.getName() + "  was not running") ;
+					commands.add(process.getName());
+					runProcess(commands, verbose);
+				}else if(verbose) {
+					System.out.println("[acs] " + process.getName() + "  was not running");
 				}
 			}
 		}
 	}
 	
-	//TODO
-	private static boolean isActive(Commands process) {
+	private boolean isActive(ExternalProcess process) {
 		List<String> commands = new ArrayList<String>();
 		commands.add("/bin/sh");
 		commands.add("-c");
 		commands.add("ps -e | grep "+ process.getName());
 		
-		String output = execute(commands, false);
+		String output = runProcess(commands, false);
 		
 		if (output != null && output.contains(process.getName())) {
 			return true;
@@ -72,7 +75,7 @@ public class ProcessManager {
 		}
 	}
 	
-	private static String execute(List<String> commands, boolean print) {
+	private String runProcess(List<String> commands, boolean print) {
 
 		try {
 	        ProcessBuilder probuilder = new ProcessBuilder(commands);
@@ -82,27 +85,26 @@ public class ProcessManager {
 
 	        OutputStream os = process.getOutputStream();
 	        PrintWriter pw = new PrintWriter(os);
-	        pw.println("n\"\"DL3");
+	        
+	        pw.println("n\"\"DL3"); //TODO meter la contraseña por consola
 	        pw.flush();
 	        
 	        InputStream is = process.getInputStream();
 	        InputStreamReader isr = new InputStreamReader(is);
 	        BufferedReader br = new BufferedReader(isr);
-	        String line;
+	        
 	        String output = "";
+	        String line;
 	        while ((line = br.readLine()) != null) {
+	        	output += line + "\n";
 	        	if (print) {
 		            System.out.println("	" + line);
 	        	}
-	            output += line;
 	        }
-	        
 	        br.close();
-	        
 			process.waitFor();
 			
 			return output;
-			
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
             return null;
