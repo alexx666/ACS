@@ -15,15 +15,8 @@ public class ProcessManager {
 	
 	private static final String bash = "/bin/sh";
 	private static final String c = "-c";
-	
-	private ExternalProcess [] processes;
-	
-	public ProcessManager() {}
-			
-	public ExternalProcess[] getProcesses() { return processes;	}
-	public void setProcesses(ExternalProcess...processes) {	this.processes = processes;	}
 
-	public void start(boolean verbose) {						
+	public static void start(ExternalProcess [] processes, boolean verbose) {						
 		for (ExternalProcess process : processes) {
 			if(!isActive(process)) {
 				if (verbose) {
@@ -40,7 +33,7 @@ public class ProcessManager {
 		}
 	}
 	
-	public void stop(boolean verbose) {
+	public static void stop(ExternalProcess [] processes, boolean verbose) {
 		if(processes.length != 0) {
 			for (ExternalProcess process : processes) {
 				if(isActive(process)) {
@@ -60,7 +53,7 @@ public class ProcessManager {
 		}
 	}
 	
-	private boolean isActive(ExternalProcess process) {
+	private static boolean isActive(ExternalProcess process) {
 		List<String> commands = new ArrayList<String>();
 		commands.add("/bin/sh");
 		commands.add("-c");
@@ -75,7 +68,7 @@ public class ProcessManager {
 		}
 	}
 	
-	private String runProcess(List<String> commands, boolean print) {
+	private static String runProcess(List<String> commands, boolean print) {
 
 		try {
 	        ProcessBuilder probuilder = new ProcessBuilder(commands);

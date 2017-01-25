@@ -1,96 +1,101 @@
 package main;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Logger;
 
+import main.dao.ProfileDao;
+import main.dao.SnapshotDao;
+import main.entities.Alert;
+import main.entities.Anomaly;
+import main.entities.Statistics;
 import main.utils.ProcessManager;
 
 public class ACS {
+	
+	private static final String FIFO = "/var/log/suricata/fast.pipe"; //TODO crear pipe en vez de meterlo a pelo
+	private static final Thread mainThread = Thread.currentThread();
+	
+	private static Logger LOGGER = Logger.getLogger(mainThread.getStackTrace()[0].getClassName());
+	private static ExternalProcess [] up = {ExternalProcess.OINKMASTER};
+	private static ExternalProcess [] pp = {ExternalProcess.PROFILE2DB, ExternalProcess.CXTRACKER};
+	private static ExternalProcess [] mp = {ExternalProcess.SURICATA, ExternalProcess.SNAPSHOT2DB, ExternalProcess.PRADS};
+	
+	static volatile boolean running = true;
 
-	private Scanner sc; //TODO user arguments instead
-	private ProcessManager pm;
-
-	public ACS() {
-
-		this.sc = new Scanner(System.in);
-		this.pm = new ProcessManager();
-
-		System.out.println();
-		System.out.println("############################################");
-		System.out.println("#         Alert Correlation System         #");
-		System.out.println("############################################");
-		manage(Options.HELP);
-	}
+	public ACS() {}
 
 	public static void main(String[] args) {
 		
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			@Override
+		ACS acs = new ACS();
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				System.out.println();
-				System.out.println("############################################");
-				System.out.println("#            Exiting : Bye Bye!            #");
-				System.out.println("############################################");
-				System.out.println();
-				
-				try { Thread.sleep(500); } 
+				running = false;
+				ProcessManager.stop(mp, true);				
+				try {mainThread.join();} 
 				catch (InterruptedException e) { e.printStackTrace(); }
 			}
-		}));
+		});
 		
-		(new ACS()).run();
+		acs.manage(Options.NIDS, true);
 	}
 
-	private void run() {
-		System.out.print("[acs]: ");
-
-		switch (sc.next()) {
-		case "1": manage(Options.NIDS); break;
-		case "2": manage(Options.PROFILES); break;
-		case "3": manage(Options.RULES); break;
-		case "h": manage(Options.HELP); break;
-		case "s": break;
-		default: run(); break;
-		}
-		
-		System.exit(1);
-	}
-
-	private void manage(Options option) {
+	private void manage(Options option, boolean verbose) {
 		switch (option){
 		case NIDS:
-			AlertHandler ah = new AlertHandler();
-			pm.setProcesses(ExternalProcess.SURICATA, ExternalProcess.SNAPSHOT2DB, ExternalProcess.PRADS);
 			System.out.println("[acs] Inicializing tools...");
-			pm.start(true);
-			ah.start();
-			if (!sc.next().contentEquals("s"));
-			ah.stop();
-			pm.stop(true);
+			ProcessManager.start(mp, verbose);
+			handleAlerts();
 			break;
 		case PROFILES:
-			pm.setProcesses(ExternalProcess.PROFILE2DB, ExternalProcess.CXTRACKER);
 			System.out.println("[acs] Inicializing tools...");
-			pm.start(true);
+			ProcessManager.start(pp, verbose);
 			System.out.println("[acs] Profiling...");
-			if (!sc.next().contentEquals("s"));
-			pm.stop(true);
 			break;
 		case RULES:
-			pm.setProcesses(ExternalProcess.OINKMASTER);
 			System.out.println("[acs] Inicializing update...");
-			pm.start(true);
+			ProcessManager.start(up, verbose);
 			System.out.println("[acs] Update finnished.");
 			break;
-		case HELP:
-			System.out.println();
-			System.out.println("Select an option:");
-			System.out.println();
-			for (int i = 0; i < java.util.Arrays.asList(Options.values()).size(); i++) {
-				System.out.println("	" + java.util.Arrays.asList(Options.values()).get(i));
-			}
-			System.out.println();
-			break;
 		}
-		run();
+	}
+	
+	private void handleAlerts() {
+		ProfileDao profileDao = new ProfileDao();
+		SnapshotDao snapshotDao = new SnapshotDao();
+		Statistics profile = profileDao.getFullProfile();
+		Statistics snapshot = profileDao.getFullProfile();
+		ExternalProcess [] prads = {ExternalProcess.PRADS};
+		
+		System.out.println("[acs] Listening...");
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(FIFO));
+			while (running) {
+				String line;
+				if ((line = in.readLine()) != null) {
+					
+					ProcessManager.stop(prads, false);
+					
+					Alert alert = new Alert(line);
+					
+					System.out.println();
+					System.out.print("[acs] Alert recieved: " + alert.getMessage() + " at: [UTC] " + alert.getDate());
+
+					if (profileDao.isProfileDataEnough()) {	profile = profileDao.getProfile(); }
+					else{ System.out.print("[P]"); }
+					if (snapshotDao.isSnapshotReady(alert.getDate())) { snapshot = snapshotDao.getSnapshot(alert.getDate()); }
+					else{ System.out.print("[S]"); }
+				
+					System.out.print(" ---> Network ANOMALY of: " + Math.round((new Anomaly(profile, snapshot)).getAnomaly()) + "/100");
+	
+					ProcessManager.start(prads, false);
+				}
+			}
+			in.close();
+		}catch (IOException ex) {
+			LOGGER.warning(ex.getMessage());
+		}
 	}
 }

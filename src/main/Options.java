@@ -18,11 +18,5 @@ public enum Options {
         public String toString() {
             return "3 - to update Suricata rules";
         }
-    },
-	HELP{
-        @Override
-        public String toString() {
-            return "h - to display this message";
-        }
     };
 }
