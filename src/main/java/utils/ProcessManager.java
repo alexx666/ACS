@@ -17,6 +17,7 @@ public class ProcessManager {
 	
 	private ExternalProcess [] processes;
 	
+	public ExternalProcess[] getProcesses() { return processes;	}
 	public ProcessManager() { this.processes = new ExternalProcess[]{}; };
 	
 	public void setProcesses(ExternalProcess...processes) {	this.processes = processes; }

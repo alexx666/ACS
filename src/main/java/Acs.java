@@ -38,45 +38,52 @@ public class Acs {
 		
 		options.addOption("m", "monitor", false, "Run the network monitoring tools (Suricata and PRADS) and calculate the network anomaly based on the NIDS alerts.");
 		options.addOption("p", "profiler", false, "Run Cxtracker to make a profile of the networks traffic.");
-		//options.addOption("u", "update", false, "Use Oinkmaster to update Suricata rules.");
+		options.addOption("u", "update", false, "Use Oinkmaster to update Suricata rules.");
 		
 		try {
 			CommandLine cmd = parser.parse(options, args);
 			
-			Runtime.getRuntime().addShutdownHook(new Thread() {
+			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+				@Override
 				public void run() {
 					System.out.println();
 					running = false;
-					pm.stop(true);
 					try {mainThread.join();} 
-					catch (InterruptedException e) { e.printStackTrace(); }
+					catch (InterruptedException e) { e.printStackTrace(); }					
 				}
-			});
+			}));
 			
 			if (cmd.getOptions().length != 1) { formatter.printHelp("run-command [option]", options); }
-			else if (cmd.hasOption("m")) {	acs.handleAlerts(); }
-			else if (cmd.hasOption("p")) {	acs.runProfiler(); }			
+			else if (cmd.hasOption("m")) {	acs.runAlertHandler(); }
+			else if (cmd.hasOption("p")) {	acs.runProfiler(); }	
+			else if (cmd.hasOption("u")) { acs.runUpdater(); }
 		} catch (ParseException e) {
 			System.out.println(e.getMessage());
             formatter.printHelp("run-command [option]", options);
 		}
 	}
 	
+	private void runUpdater() {
+		pm.setProcesses(ExternalProcess.OINKMASTER);
+		pm.start(true);
+	}
+	
 	private void runProfiler() {
 		pm.setProcesses(ExternalProcess.PROFILE2DB,	ExternalProcess.CXTRACKER);
 		pm.start(true);
+		System.out.println("[acs] Profiling network traffic...");
 		while(running);
+		pm.stop(true);
 	}
 	
-	private void handleAlerts() {		
-		ProfileDao profileDao = new ProfileDao();
-		SnapshotDao snapshotDao = new SnapshotDao();
-		Statistics profile = profileDao.getFullProfile();
-		Statistics snapshot = profileDao.getFullProfile();
-		
+	private void runAlertHandler() {
 		pm.setProcesses(ExternalProcess.SURICATA, ExternalProcess.SNAPSHOT2DB, ExternalProcess.PRADS);
 		pm.start(true);
-		System.out.println("[acs] Listening...");
+		
+		ProfileDao profileDao = new ProfileDao();
+		SnapshotDao snapshotDao = new SnapshotDao();
+
+		System.out.println("[acs] Listening for Suricata alerts...");
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(FIFO));
 			pm.setProcesses(ExternalProcess.PRADS);
@@ -85,16 +92,27 @@ public class Acs {
 				if ((line = in.readLine()) != null) {
 					pm.stop(false);
 					
+					Statistics profile = null;
+					Statistics snapshot = null;
+					
 					Alert alert = new Alert(line);
 					
 					System.out.println();
 					System.out.print("[acs] Alert recieved: " + alert.getMessage() + " at: [UTC] " + alert.getDate());
-
-					if (profileDao.isProfileDataEnough()) {	profile = profileDao.getProfile(); }
-					else{ System.out.print("[P]"); }
 					
-					if (snapshotDao.isSnapshotReady(alert.getDate())) { snapshot = snapshotDao.getSnapshot(alert.getDate()); }
-					else{ System.out.print("[S]"); }
+					if (profileDao.isProfileDataEnough()) {	
+						profile = profileDao.getProfile(); 
+					}else{ 
+						System.out.print("[P]"); 
+						profile = profileDao.getFullProfile();
+					}
+					
+					if (snapshotDao.isSnapshotReady(alert.getDate())) { 
+						snapshot = snapshotDao.getSnapshot(alert.getDate()); 
+					}else{ 
+						System.out.print("[S]"); 
+						snapshot = profileDao.getFullProfile();
+					}
 				
 					Anomaly anomaly = new Anomaly(profile, snapshot);
 					
@@ -104,9 +122,11 @@ public class Acs {
 				}
 			}
 			in.close();
-			pm.setProcesses(ExternalProcess.SURICATA, ExternalProcess.SNAPSHOT2DB, ExternalProcess.PRADS);
 		}catch (IOException ex) {
 			LOGGER.warning(ex.getMessage());
+		}finally{
+			pm.setProcesses(ExternalProcess.SURICATA, ExternalProcess.SNAPSHOT2DB, ExternalProcess.PRADS);
+			pm.stop(true);
 		}
 	}
 }
