@@ -1,4 +1,4 @@
-package main.entities;
+package main.java.entities;
 
 public class Flow {
 	

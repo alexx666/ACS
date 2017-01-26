@@ -1,4 +1,4 @@
-package main;
+package main.java;
 
 /**
  * This enumeration defines a runnable command needed for ACS and its components to work

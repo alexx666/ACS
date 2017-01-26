@@ -1,66 +1,65 @@
-package main.utils;
+package main.java.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.ExternalProcess;
+import main.java.ExternalProcess;
 
 public class ProcessManager {
 	
 	private static final String bash = "/bin/sh";
 	private static final String c = "-c";
+	
+	private ExternalProcess [] processes;
+	
+	public ProcessManager() { this.processes = new ExternalProcess[]{}; };
+	
+	public void setProcesses(ExternalProcess...processes) {	this.processes = processes; }
 
-	public static void start(ExternalProcess [] processes, boolean verbose) {						
-		for (ExternalProcess process : processes) {
-			if(!isActive(process)) {
-				if (verbose) {
-					System.out.println("[acs] Starting: " + process.getName());
-				}
-				List<String> commands = new ArrayList<String>();
-				commands.add(bash);
-				commands.add(c);
-				commands.add(process.getCommand());
-				runProcess(commands, verbose);
-			}else if(verbose){
-				System.out.println("[acs]  " + process.getName() + " is already running");
+	public void start(boolean verbose) {
+		if(processes.length != 0) {
+			if (verbose) System.out.println("[acs] Inicializing tools...");
+			for (ExternalProcess process : processes) {
+				if(!isActive(process)) {
+					if (verbose) System.out.println("[acs] Starting: " + process.getName());
+					List<String> commands = new ArrayList<String>();
+					commands.add(bash);
+					commands.add(c);
+					commands.add(process.getCommand());
+					runProcess(commands, verbose);
+				}else if(verbose) System.out.println("[acs]  " + process.getName() + " is already running");
 			}
 		}
 	}
 	
-	public static void stop(ExternalProcess [] processes, boolean verbose) {
+	public void stop(boolean verbose) {
 		if(processes.length != 0) {
 			for (ExternalProcess process : processes) {
 				if(isActive(process)) {
-					if(verbose){
-						System.out.println("[acs] Stopping: " + process.getName());
-					}
+					if(verbose) System.out.println("[acs] Stopping: " + process.getName());
 					List<String> commands = new ArrayList<String>();
 					commands.add("sudo");
 					commands.add("-S");
 					commands.add("killall");
 					commands.add(process.getName());
 					runProcess(commands, verbose);
-				}else if(verbose) {
-					System.out.println("[acs] " + process.getName() + "  was not running");
-				}
+				}else if(verbose) System.out.println("[acs] " + process.getName() + "  was not running");
 			}
 		}
 	}
 	
-	private static boolean isActive(ExternalProcess process) {
+	private boolean isActive(ExternalProcess process) {
 		List<String> commands = new ArrayList<String>();
 		commands.add("/bin/sh");
 		commands.add("-c");
 		commands.add("ps -e | grep "+ process.getName());
 		
 		String output = runProcess(commands, false);
-		
 		if (output != null && output.contains(process.getName())) {
 			return true;
 		}else{
@@ -68,18 +67,16 @@ public class ProcessManager {
 		}
 	}
 	
-	private static String runProcess(List<String> commands, boolean print) {
-
+	private String runProcess(List<String> commands, boolean print) {
 		try {
 	        ProcessBuilder probuilder = new ProcessBuilder(commands);
 	        Process process;
 			
 			process = probuilder.start();
 
-	        OutputStream os = process.getOutputStream();
-	        PrintWriter pw = new PrintWriter(os);
-	        
-	        pw.println("n\"\"DL3"); //TODO meter la contraseña por consola
+			PrintWriter pw = new PrintWriter(process.getOutputStream());
+			/* TODO meter la contraseña por consola */
+	        pw.println("n\"\"DL3"); 
 	        pw.flush();
 	        
 	        InputStream is = process.getInputStream();

@@ -1,4 +1,4 @@
-package main.dao;
+package main.java.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import main.entities.Flow;
-import main.entities.Statistics;
+import main.java.entities.Flow;
+import main.java.entities.Statistics;
 
 public class SnapshotDao {
 	

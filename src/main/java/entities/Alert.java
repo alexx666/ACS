@@ -1,4 +1,4 @@
-package main.entities;
+package main.java.entities;
 
 import java.util.Calendar;
 
@@ -14,8 +14,8 @@ public class Alert {
 	}
 	
 	public String getDate() {
-		String time = main.utils.Dates.getTimestampFrom(line);
-		Calendar cal = main.utils.Dates.toCal(time);
-		return main.utils.Dates.addNHoursToTime(cal, -2);
+		String time = main.java.utils.Dates.getTimestampFrom(line);
+		Calendar cal = main.java.utils.Dates.toCal(time);
+		return main.java.utils.Dates.addNHoursToTime(cal, -2);
 	}
 }
