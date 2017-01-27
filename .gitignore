@@ -1,4 +1,5 @@
 bin/
 .classpath
 .project
+acs.jar
 hs_err_pid*

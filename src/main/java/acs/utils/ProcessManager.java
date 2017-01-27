@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,11 +73,6 @@ public class ProcessManager {
 	        Process process;
 			
 			process = probuilder.start();
-
-			PrintWriter pw = new PrintWriter(process.getOutputStream());
-			/* TODO meter la contraseña por consola */
-	        pw.println("n\"\"DL3"); 
-	        pw.flush();
 	        
 	        InputStream is = process.getInputStream();
 	        InputStreamReader isr = new InputStreamReader(is);
