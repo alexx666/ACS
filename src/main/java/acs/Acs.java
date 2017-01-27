@@ -36,9 +36,9 @@ public class Acs {
         HelpFormatter formatter = new HelpFormatter();
 		Acs acs = new Acs();
 		
-		options.addOption("m", "monitor", false, "Run the network monitoring tools (Suricata and PRADS) and calculate the network anomaly based on the NIDS alerts.");
-		options.addOption("p", "profiler", false, "Run Cxtracker to make a profile of the networks traffic.");
-		options.addOption("u", "update", false, "Use Oinkmaster to update Suricata rules.");
+		options.addOption("m", "monitor", false, "Calculate network anomaly based on the NIDS alerts.");
+		options.addOption("p", "profile", false, "Create network profiles using the connection tracker.");
+		options.addOption("u", "update", false, "Run Oinkmaster to update NIDS rules.");
 		
 		try {
 			CommandLine cmd = parser.parse(options, args);
@@ -92,31 +92,29 @@ public class Acs {
 				if ((line = in.readLine()) != null) {
 					pm.stop(false);
 					
-					Statistics profile = null;
-					Statistics snapshot = null;
-					
 					Alert alert = new Alert(line);
 					
 					System.out.println();
-					System.out.print("[acs] Alert recieved: " + alert.getMessage() + " at: [UTC] " + alert.getDate());
+					System.out.print("[acs] Alert type: " + alert.getMessage() + " at: [UTC] " + alert.getDate());
+					
+					Statistics profile = profileDao.getFullProfile(); 
+					Statistics snapshot = profile;
 					
 					if (profileDao.isProfileDataEnough()) {	
 						profile = profileDao.getProfile(); 
 					}else{ 
 						System.out.print("[P]"); 
-						profile = profileDao.getFullProfile();
 					}
 					
 					if (snapshotDao.isSnapshotReady(alert.getDate())) { 
 						snapshot = snapshotDao.getSnapshot(alert.getDate()); 
 					}else{ 
 						System.out.print("[S]"); 
-						snapshot = profileDao.getFullProfile();
 					}
 				
 					Anomaly anomaly = new Anomaly(profile, snapshot);
 					
-					System.out.print(" ---> Network ANOMALY of: " + Math.round(anomaly.getAnomaly()) + "/100");
+					System.out.print(" > ANOMALY: " + Math.round(anomaly.getAnomaly()) + "/100");
 	
 					pm.start(false);
 				}
