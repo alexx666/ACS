@@ -8,6 +8,10 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
+  	<property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="${dir.buildfile}/.."/>
+    <property name="dir.jarfile" value="${dir.workspace}/myJars"/>       	
+     
     <path id="acs.classpath">
         <pathelement location="bin"/>
         <pathelement location="lib/commons-cli-1.3.1.jar"/>
@@ -22,11 +26,7 @@
             </fileset>
         </copy>
     </target>
-    <target name="clean">
-        <delete dir="bin"/>
-    </target>
-              	
-    <target name="create_run_jar">
+  	<target name="create_run_jar">
         <jar destfile="${dir.jarfile}/acs.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="main.java.Acs"/>
@@ -37,8 +37,10 @@
             <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/mysql-connector-java-5.1.39-bin.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/yamlbeans-1.0.jar"/>
         </jar>
+    </target>  
+    <target name="clean">
+        <delete dir="bin"/>
     </target>
-              	
     <target depends="clean" name="cleanall"/>
     <target depends="build-subprojects,build-project" name="build"/>
     <target name="build-subprojects"/>
