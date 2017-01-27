@@ -1,16 +1,16 @@
-package main.java;
+package main.java.acs;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import main.java.dao.ProfileDao;
-import main.java.dao.SnapshotDao;
-import main.java.entities.Alert;
-import main.java.entities.Anomaly;
-import main.java.entities.Statistics;
-import main.java.utils.ProcessManager;
+import main.java.acs.dao.ProfileDao;
+import main.java.acs.dao.SnapshotDao;
+import main.java.acs.entities.Alert;
+import main.java.acs.entities.Anomaly;
+import main.java.acs.entities.Statistics;
+import main.java.acs.utils.ProcessManager;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -53,7 +53,7 @@ public class Acs {
 				}
 			}));
 			
-			if (cmd.getOptions().length != 1) { formatter.printHelp("run-command [option]", options); }
+			if (cmd.getOptions().length != 1) { formatter.printHelp("acs [option]", options); }
 			else if (cmd.hasOption("m")) {	acs.runAlertHandler(); }
 			else if (cmd.hasOption("p")) {	acs.runProfiler(); }	
 			else if (cmd.hasOption("u")) { acs.runUpdater(); }

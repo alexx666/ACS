@@ -1,4 +1,4 @@
-package main.java.entities;
+package main.java.acs.entities;
 
 import java.util.ArrayList;
 import java.util.List;
