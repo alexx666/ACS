@@ -1,5 +1,4 @@
 bin/
 .classpath
 .project
-*.jar
 hs_err_pid*
