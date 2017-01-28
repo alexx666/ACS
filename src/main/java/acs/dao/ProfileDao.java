@@ -17,18 +17,22 @@ import main.java.acs.entities.Statistics;
 public class ProfileDao {
 	
 	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
-	private static String DB = "cxtracker";
-	private static String USER = "cxtracker";
-	private static String PASS = "cxtracker";
+	private String db;
+	private String user;
+	private String pass;
 			
-	public ProfileDao() {}
+	public ProfileDao(String db, String user, String pass) {
+		this.db = db;
+		this.user = user;
+		this.pass = pass;
+	}
 
 	public Statistics getProfile() { 
 		
 		try {
 			Statistics profile = null;
 
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+DB+"?user="+USER+"&password="+PASS);
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+db+"?user="+user+"&password="+pass);
 			
 			Date now = new Date();
 			
@@ -76,7 +80,7 @@ public class ProfileDao {
 	public Statistics getFullProfile() {
 		try {
 			Statistics profile = null;
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+DB+"?user="+USER+"&password="+PASS);
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+db+"?user="+user+"&password="+pass);
 			Date now = new Date();
 			String dayOfWeek = main.java.acs.utils.Dates.toString(now, "EEEE");
 			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from session_nidslinux_VirtualBox_" + dayOfWeek;
@@ -118,7 +122,7 @@ public class ProfileDao {
 	
 	public boolean isProfileDataEnough() {
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+DB+"?user="+USER+"&password="+PASS);
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+db+"?user="+user+"&password="+pass);
 			Date now = new Date();
 			String startTime = main.java.acs.utils.Dates.addNMinutesToTime(Calendar.getInstance(), -5);
 			String endTime = main.java.acs.utils.Dates.addNMinutesToTime(Calendar.getInstance(), 5);
