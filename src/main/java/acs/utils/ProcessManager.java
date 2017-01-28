@@ -43,6 +43,8 @@ public class ProcessManager {
 				if(isActive(process)) {
 					if(verbose) System.out.println("[acs] Stopping: " + process.getName());
 					List<String> commands = new ArrayList<String>();
+					commands.add("sudo");
+					commands.add("-S");
 					commands.add("killall");
 					commands.add(process.getName());
 					runProcess(commands, verbose);
@@ -68,6 +70,7 @@ public class ProcessManager {
 	private String runProcess(List<String> commands, boolean print) {
 		try {
 	        ProcessBuilder probuilder = new ProcessBuilder(commands);
+	        probuilder.redirectErrorStream(true);
 	        Process process;
 			
 			process = probuilder.start();
@@ -81,7 +84,7 @@ public class ProcessManager {
 	        while ((line = br.readLine()) != null) {
 	        	output += line + "\n";
 	        	if (print) {
-		            System.out.println("	" + line);
+		            System.out.println("  " + line);
 	        	}
 	        }
 	        br.close();
