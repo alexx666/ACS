@@ -4,13 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import main.java.acs.dao.ProfileDao;
-import main.java.acs.dao.SnapshotDao;
-import main.java.acs.entities.Alert;
-import main.java.acs.entities.Anomaly;
-import main.java.acs.entities.Statistics;
-import main.java.acs.utils.ProcessManager;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -18,28 +11,39 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-public class AcsMain {
+import main.java.acs.dao.ProfileDao;
+import main.java.acs.dao.SnapshotDao;
+import main.java.acs.entities.Alert;
+import main.java.acs.entities.Anomaly;
+import main.java.acs.entities.Statistics;
+import main.java.acs.utils.ProcessManager;
+
+public class ACSMain {
 	
 	private static final String FIFO = "/var/log/suricata/fast.pipe"; //TODO crear pipe en vez de meterlo a pelo
 	private static final String DB = "cxtracker"; //TODO get from YAML file
 	private static final String USER = "cxtracker"; //TODO get from YAML file
 	private static final String PASS = "cxtracker"; //TODO get from YAML file
 	private static final Thread mainThread = Thread.currentThread();
-	private static volatile ProcessManager pm = new ProcessManager();
 	private static volatile boolean running = true;
+	private static volatile ProcessManager pm = new ProcessManager();
 	private static Object lock = new Object();
+	//private static ACSConfiguration config;
 
-	public AcsMain() {}
+	public ACSMain() {}
 
 	public static void main(String[] args) {
 		Options options = new Options();
 		CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
-        AcsMain acs = new AcsMain();
+        ACSMain acs = new ACSMain();
 		
 		options.addOption("m", "monitor", false, "Run the network monitoring tools (Suricata and PRADS) and calculate the network anomaly based on the NIDS alerts.");
 		options.addOption("p", "profiler", false, "Run Cxtracker to make a profile of the networks traffic.");
 		options.addOption("u", "update", false, "Use Oinkmaster to update Suricata rules.");
+		
+		//config = new ACSConfiguration("acs.yml");
+		//config.init();
 		
 		try {
 			CommandLine cmd = parser.parse(options, args);

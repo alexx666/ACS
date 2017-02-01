@@ -1,0 +1,6 @@
+# TODO - Test YAML file
+# suricata.yaml location
+# suricata -i interface
+# prads/cxtracker -i interface
+# DB, USER, PASS
+# oinkmaster /suricata/rules location
