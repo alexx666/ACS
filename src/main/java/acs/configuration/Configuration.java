@@ -1,6 +1,6 @@
 package main.java.acs.configuration;
 
-import main.java.acs.utils.ProcessManager;
+import main.java.acs.utils.process.ProcessManager;
 
 public abstract class Configuration {
 	

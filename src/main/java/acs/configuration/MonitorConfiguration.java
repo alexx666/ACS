@@ -9,6 +9,7 @@ import main.java.acs.dao.SnapshotDao;
 import main.java.acs.entities.Alert;
 import main.java.acs.entities.Anomaly;
 import main.java.acs.entities.Statistics;
+import main.java.acs.utils.process.ExternalProcess;
 
 public class MonitorConfiguration extends Configuration {
 	

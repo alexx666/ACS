@@ -1,4 +1,4 @@
-package main.java.acs.utils;
+package main.java.acs.utils.general;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package main.java.acs.utils;
+package main.java.acs.utils.process;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import main.java.acs.configuration.ExternalProcess;
 
 public class ProcessManager {
 	

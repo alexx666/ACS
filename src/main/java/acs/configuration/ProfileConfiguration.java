@@ -1,5 +1,7 @@
 package main.java.acs.configuration;
 
+import main.java.acs.utils.process.ExternalProcess;
+
 public class ProfileConfiguration extends Configuration {
 	
 	public ProfileConfiguration() {

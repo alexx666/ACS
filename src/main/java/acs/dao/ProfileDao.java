@@ -36,9 +36,9 @@ public class ProfileDao {
 			
 			Date now = new Date();
 			
-			String startTime = main.java.acs.utils.Dates.addNMinutesToTime(Calendar.getInstance(), -5);
-			String endTime = main.java.acs.utils.Dates.addNMinutesToTime(Calendar.getInstance(), 5);
-			String dayOfWeek = main.java.acs.utils.Dates.toString(now, "EEEE");
+			String startTime = main.java.acs.utils.general.Dates.addNMinutesToTime(Calendar.getInstance(), -5);
+			String endTime = main.java.acs.utils.general.Dates.addNMinutesToTime(Calendar.getInstance(), 5);
+			String dayOfWeek = main.java.acs.utils.general.Dates.toString(now, "EEEE");
 			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from session_nidslinux_VirtualBox_" + dayOfWeek + " where date_format(start_time, '%H:%i:%s') between '"+startTime+"' and '"+endTime+"';";
 			
 			Statement stmt = connection.createStatement();
@@ -82,7 +82,7 @@ public class ProfileDao {
 			Statistics profile = null;
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+db+"?user="+user+"&password="+pass);
 			Date now = new Date();
-			String dayOfWeek = main.java.acs.utils.Dates.toString(now, "EEEE");
+			String dayOfWeek = main.java.acs.utils.general.Dates.toString(now, "EEEE");
 			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from session_nidslinux_VirtualBox_" + dayOfWeek;
 			Statement stmt = connection.createStatement();
 		    if (stmt.execute(query)) {
@@ -124,9 +124,9 @@ public class ProfileDao {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+db+"?user="+user+"&password="+pass);
 			Date now = new Date();
-			String startTime = main.java.acs.utils.Dates.addNMinutesToTime(Calendar.getInstance(), -5);
-			String endTime = main.java.acs.utils.Dates.addNMinutesToTime(Calendar.getInstance(), 5);
-			String dayOfWeek = main.java.acs.utils.Dates.toString(now, "EEEE");
+			String startTime = main.java.acs.utils.general.Dates.addNMinutesToTime(Calendar.getInstance(), -5);
+			String endTime = main.java.acs.utils.general.Dates.addNMinutesToTime(Calendar.getInstance(), 5);
+			String dayOfWeek = main.java.acs.utils.general.Dates.toString(now, "EEEE");
 			String query = "select count(*) from session_nidslinux_VirtualBox_" + dayOfWeek + " where date_format(start_time, '%H:%i:%s') between '"+startTime+"' and '"+endTime+"';";
 		    Statement stmt = connection.createStatement();
 		    if (stmt.execute(query)) {
