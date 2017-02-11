@@ -9,8 +9,8 @@ public class ACS {
 		ConfigurationFactory cf = new ConfigurationFactory();
 		
 		try {
-			Configuration config = cf.getConfiguration(args);
-			config.run();
-		}catch (NullPointerException e) {}
+			Configuration conf = cf.getConfiguration(args);
+			conf.run();
+		}catch(NullPointerException e){}
 	}
 }

@@ -18,23 +18,25 @@ public class ConfigurationFactory {
         formatter = new HelpFormatter();
 		options = new Options();
 		
-        options.addOption("m", "monitor", false, "Run the network monitoring tools (Suricata and PRADS) and calculate the network anomaly based on the NIDS alerts.");
-		options.addOption("p", "profiler", false, "Run Cxtracker to make a profile of the networks traffic.");
-		options.addOption("u", "update", false, "Use Oinkmaster to update Suricata rules.");
+        options.addOption("m", "mode", true, "Select between monitor, profiler and updater.");	
+        options.addOption("f", "file", true, "Path to acs.yml configuration file.");
 	}
 	
 	public Configuration getConfiguration(String [] args) throws NullPointerException {
 		try {
 			CommandLine cmd = parser.parse(options, args);
-			if (cmd.getOptions().length != 1) { 
-				formatter.printHelp("acs [option]", options);
-				throw new NullPointerException();
-			}else if (cmd.hasOption("m")) {	
-				return new MonitorConfiguration();
-			}else if (cmd.hasOption("p")) {	
-				return new ProfileConfiguration();
-			}else if (cmd.hasOption("u")) {
-				return new UpdateConfiguration();
+			if (cmd.hasOption("f")) {
+				YAML.setParamsFromFile(cmd.getOptionValue("f"));
+			}
+			if (cmd.hasOption("m")) {	
+				switch (cmd.getOptionValue("m")) {
+				case "monitor": return new MonitorConfiguration();
+				case "profiler": return new ProfileConfiguration();
+				case "updater": return new UpdateConfiguration();
+				default: 
+					formatter.printHelp("acs [option]", options);
+					throw new NullPointerException();
+				}
 			}else{
 				formatter.printHelp("acs [option]", options);
 				throw new NullPointerException();
