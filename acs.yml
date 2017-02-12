@@ -1,8 +1,13 @@
-# TODO - Test YAML file
-# suricata.yaml location
-# suricata -i interface
-# prads/cxtracker -i interface
-# DB, USER, PASS
-# oinkmaster /suricata/rules location
+suricata: 
+    inet: eth1
+    yaml: /etc/suricata/suricata.yaml
+    rules: /etc/suricata/rules
 
-suricata: eth1
+trackers:
+    inet: eth2
+    logs: /var/log
+    db: cxtracker
+    user: cxtracker
+    pass: cxtracker
+
+#outputs:

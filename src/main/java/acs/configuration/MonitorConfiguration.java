@@ -13,10 +13,6 @@ import main.java.acs.utils.process.ExternalProcess;
 
 public class MonitorConfiguration extends Configuration {
 	
-	public MonitorConfiguration() {
-		// TODO 
-	}
-
 	@Override
 	public void run() {
 		getPm().setProcesses(ExternalProcess.SURICATA, ExternalProcess.SNAPSHOT2DB, ExternalProcess.PRADS);
