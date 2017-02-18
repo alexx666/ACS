@@ -1,10 +1,10 @@
 suricata: 
-    inet: eth1
+    inet: eth0
     yaml: /etc/suricata/suricata.yaml
     rules: /etc/suricata/rules
 
 trackers:
-    inet: eth2
+    inet: eth0
     logs: /var/log
     db: cxtracker
     user: cxtracker
