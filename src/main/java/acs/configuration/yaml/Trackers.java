@@ -1,4 +1,4 @@
-package main.java.acs.yaml.entity;
+package main.java.acs.configuration.yaml;
 
 public class Trackers {
 	public String inet;

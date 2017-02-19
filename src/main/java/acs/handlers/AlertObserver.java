@@ -1,7 +1,7 @@
 package main.java.acs.handlers;
 
-import main.java.acs.dao.ProfileDao;
-import main.java.acs.dao.SnapshotDao;
+import main.java.acs.db.dao.ProfileDao;
+import main.java.acs.db.dao.SnapshotDao;
 import main.java.acs.entities.Anomaly;
 import main.java.acs.entities.Statistics;
 
@@ -18,8 +18,8 @@ public class AlertObserver implements Observer {
 		this.subject = subject;
 		this.subject.addObserver(this);
 		
-		profileDao = new ProfileDao("cxtracker", "cxtracker", "cxtracker");
-		snapshotDao = new SnapshotDao("cxtracker", "cxtracker", "cxtracker");
+		profileDao = new ProfileDao();
+		snapshotDao = new SnapshotDao();
 		profile = profileDao.getFullProfile();
 		snapshot = profile;
 	}

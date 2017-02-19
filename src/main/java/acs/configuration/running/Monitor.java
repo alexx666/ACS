@@ -1,4 +1,4 @@
-package main.java.acs.configuration;
+package main.java.acs.configuration.running;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,9 +7,9 @@ import java.io.IOException;
 import main.java.acs.entities.Alert;
 import main.java.acs.handlers.AlertObserver;
 import main.java.acs.handlers.AlertSubject;
-import main.java.acs.utils.process.ExternalProcess;
+import main.java.acs.process.ExternalProcess;
 
-public class MonitorConfiguration extends Configuration {
+public class Monitor extends RunConfiguration {
 	
 	@Override
 	public void run() {

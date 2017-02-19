@@ -1,8 +1,8 @@
-package main.java.acs.configuration;
+package main.java.acs.configuration.running;
 
-import main.java.acs.utils.process.ExternalProcess;
+import main.java.acs.process.ExternalProcess;
 
-public class ProfileConfiguration extends Configuration {
+public class Profile extends RunConfiguration {
 
 	@Override
 	public void run() {

@@ -1,10 +1,9 @@
-package main.java.acs.yaml;
+package main.java.acs.configuration.yaml;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import main.java.acs.utils.process.ExternalProcess;
-import main.java.acs.yaml.entity.Tools;
+import main.java.acs.process.ExternalProcess;
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 
@@ -23,6 +22,8 @@ public class YMLConfiguration {
 		return instance;
 	}
 		
+	public Tools getTools() { return tools; }
+
 	public void runWithFile(String filePath) {
 		try {
 			YamlReader reader = new YamlReader(new FileReader(filePath));

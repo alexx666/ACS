@@ -7,9 +7,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import main.java.acs.configuration.Configuration;
-import main.java.acs.configuration.ConfigurationFactory;
-import main.java.acs.yaml.YMLConfiguration;
+import main.java.acs.configuration.running.RunConfiguration;
+import main.java.acs.configuration.running.RunConfigurationFactory;
+import main.java.acs.configuration.yaml.YMLConfiguration;
 
 public class ACS {
 	
@@ -32,8 +32,8 @@ public class ACS {
 			CommandLine cmd = parser.parse(options, args);
 			if (cmd.hasOption("f") && cmd.hasOption("m")) {
 				YMLConfiguration.getInstance().runWithFile(cmd.getOptionValue("f"));
-				ConfigurationFactory cf = new ConfigurationFactory();
-				Configuration configuration = cf.getConfiguration(cmd.getOptionValue("m"));
+				RunConfigurationFactory cf = new RunConfigurationFactory();
+				RunConfiguration configuration = cf.getConfiguration(cmd.getOptionValue("m"));
 				configuration.run();
 			}else{
 				formatter.printHelp("acs [option]", options);
