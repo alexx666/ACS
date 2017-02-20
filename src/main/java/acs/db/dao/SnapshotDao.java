@@ -1,7 +1,5 @@
-package main.java.acs.dao;
+package main.java.acs.db.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,22 +7,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.mysql.jdbc.Connection;
+
+import main.java.acs.db.connection.JDBCConnectionPool;
 import main.java.acs.entities.Flow;
 import main.java.acs.entities.Statistics;
 
 public class SnapshotDao {
 	
 	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
-	private static String DB = "cxtracker";
-	private static String USER = "cxtracker";
-	private static String PASS = "cxtracker";
+	
+	private JDBCConnectionPool jdbcpool;
 			
-	public SnapshotDao() {}
+	public SnapshotDao() {
+		this.jdbcpool = JDBCConnectionPool.getInstance();
+	}
 
 	public Statistics getSnapshot(String time) {
 		try {
 
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+DB+"?user="+USER+"&password="+PASS);
+			Connection connection = jdbcpool.checkOut();
 	
 			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from snapshot_session_nidslinux_VirtualBox where end_time >= '" + time + "';";
 		    Statement stmt = connection.createStatement();
@@ -53,11 +55,11 @@ public class SnapshotDao {
 		        }
 		        rs.close();
 	    		stmt.close();
-	    		connection.close();
-				return new Statistics(cons);
+	    		jdbcpool.checkIn(connection);
+	    		return new Statistics(cons);
 		    }else{
 	    		stmt.close();
-	    		connection.close();
+	    		jdbcpool.checkIn(connection);
 		    	return null;
 		    }
 		}catch (SQLException ex){ 
@@ -69,7 +71,7 @@ public class SnapshotDao {
 	public boolean isSnapshotReady(String time) {
 		try {
 
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+DB+"?user="+USER+"&password="+PASS);
+			Connection connection = jdbcpool.checkOut();
 	
 			String query = "select count(*) from snapshot_session_nidslinux_VirtualBox where end_time >= '" + time + "';";
 		    Statement stmt = connection.createStatement();
@@ -79,19 +81,18 @@ public class SnapshotDao {
 		    	if (rs.getInt("count(*)") > 0) {
 		    		rs.close();
 		    		stmt.close();
-		    		connection.close();
-			    	return true;
+		    		jdbcpool.checkIn(connection);
+					return true;
 		    	}else{
 		    		rs.close();
 		    		stmt.close();
-		    		connection.close();
+		    		jdbcpool.checkIn(connection);
 		    		return false;
 		    	}
-		    }else{
-	    		stmt.close();
-	    		connection.close();
-		    	return false;
 		    }
+	    	stmt.close();
+	    	jdbcpool.checkIn(connection);
+		    return false;
 		}catch (SQLException ex){ 
 			LOGGER.warning(ex.getMessage());
 			return false;

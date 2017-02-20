@@ -1,7 +1,5 @@
-package main.java.acs.dao;
+package main.java.acs.db.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,24 +9,28 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.mysql.jdbc.Connection;
+
+import main.java.acs.db.connection.JDBCConnectionPool;
 import main.java.acs.entities.Flow;
 import main.java.acs.entities.Statistics;
 
 public class ProfileDao {
 	
 	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
-	private static String DB = "cxtracker";
-	private static String USER = "cxtracker";
-	private static String PASS = "cxtracker";
+	
+	private JDBCConnectionPool jdbcpool;
 			
-	public ProfileDao() {}
+	public ProfileDao() {
+		this.jdbcpool = JDBCConnectionPool.getInstance();
+	}
 
 	public Statistics getProfile() { 
 		
 		try {
 			Statistics profile = null;
 
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+DB+"?user="+USER+"&password="+PASS);
+			Connection connection = jdbcpool.checkOut();
 			
 			Date now = new Date();
 			
@@ -65,7 +67,7 @@ public class ProfileDao {
 		        rs.close();
 		    }
 		    stmt.close();
-		    connection.close();
+		    jdbcpool.checkIn(connection);
 		    return profile;
 		}catch (SQLException ex){ 
 			LOGGER.info("SQLException: " + ex.getMessage()); 
@@ -76,7 +78,7 @@ public class ProfileDao {
 	public Statistics getFullProfile() {
 		try {
 			Statistics profile = null;
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+DB+"?user="+USER+"&password="+PASS);
+			Connection connection = jdbcpool.checkOut();
 			Date now = new Date();
 			String dayOfWeek = main.java.acs.utils.Dates.toString(now, "EEEE");
 			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from session_nidslinux_VirtualBox_" + dayOfWeek;
@@ -108,7 +110,7 @@ public class ProfileDao {
 		        rs.close();
 		    }
 		    stmt.close();
-		    connection.close();
+		    jdbcpool.checkIn(connection);
 		    return profile;
 		}catch (SQLException ex){ 
 			LOGGER.info("SQLException: " + ex.getMessage());
@@ -118,7 +120,8 @@ public class ProfileDao {
 	
 	public boolean isProfileDataEnough() {
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/"+DB+"?user="+USER+"&password="+PASS);
+			Connection connection = jdbcpool.checkOut();
+			
 			Date now = new Date();
 			String startTime = main.java.acs.utils.Dates.addNMinutesToTime(Calendar.getInstance(), -5);
 			String endTime = main.java.acs.utils.Dates.addNMinutesToTime(Calendar.getInstance(), 5);
@@ -131,19 +134,18 @@ public class ProfileDao {
 		    	if (rs.getInt("count(*)") > 0) {
 		    		rs.close();
 		    		stmt.close();
-		    		connection.close();
-			    	return true;
+		    		jdbcpool.checkIn(connection);
+		    		return true;
 		    	}else{
 		    		rs.close();
 		    		stmt.close();
-		    		connection.close();
+		    		jdbcpool.checkIn(connection);
 		    		return false;
 		    	}
-		    }else{
-	    		stmt.close();
-	    		connection.close();
-		    	return false;
 		    }
+		    stmt.close();
+    		jdbcpool.checkIn(connection);
+		    return false;
 		}catch (SQLException ex){ 
 			LOGGER.warning(ex.getMessage());
 			return false;

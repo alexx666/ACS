@@ -1,4 +1,4 @@
-package main.java.acs.utils;
+package main.java.acs.process;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import main.java.acs.ExternalProcess;
 
 public class ProcessManager {
 	
@@ -20,8 +18,31 @@ public class ProcessManager {
 	public ProcessManager() { this.processes = new ExternalProcess[]{}; };
 	
 	public void setProcesses(ExternalProcess...processes) {	this.processes = processes; }
+	
+	public void start(ExternalProcess process, boolean verbose) {
+		if(!isActive(process)) {
+			if (verbose) System.out.println("[acs] Starting: " + process.getName());
+			List<String> commands = new ArrayList<String>();
+			commands.add(bash);
+			commands.add(c);
+			commands.add(process.getCommand());
+			runProcess(commands, verbose);
+		}else if(verbose) System.out.println("[acs]  " + process.getName() + " is already running");
+	}
+	
+	public void stop(ExternalProcess process, boolean verbose) {
+		if(isActive(process)) {
+			if(verbose) System.out.println("[acs] Stopping: " + process.getName());
+			List<String> commands = new ArrayList<String>();
+			commands.add("sudo");
+			commands.add("-S");
+			commands.add("killall");
+			commands.add(process.getName());
+			runProcess(commands, verbose);
+		}else if(verbose) System.out.println("[acs] " + process.getName() + " is not running");
+	}
 
-	public void start(boolean verbose) {
+	public void startAll(boolean verbose) {
 		if(processes.length != 0) {
 			if (verbose) System.out.println("[acs] Inicializing tools...");
 			for (ExternalProcess process : processes) {
@@ -37,7 +58,7 @@ public class ProcessManager {
 		}
 	}
 	
-	public void stop(boolean verbose) {
+	public void stopAll(boolean verbose) {
 		if(processes.length != 0) {
 			for (ExternalProcess process : processes) {
 				if(isActive(process)) {
@@ -70,6 +91,7 @@ public class ProcessManager {
 	private String runProcess(List<String> commands, boolean print) {
 		try {
 	        ProcessBuilder probuilder = new ProcessBuilder(commands);
+	        probuilder.redirectErrorStream(true);
 	        Process process;
 			
 			process = probuilder.start();
@@ -83,7 +105,7 @@ public class ProcessManager {
 	        while ((line = br.readLine()) != null) {
 	        	output += line + "\n";
 	        	if (print) {
-		            System.out.println("	" + line);
+		            System.out.println("  " + line);
 	        	}
 	        }
 	        br.close();
