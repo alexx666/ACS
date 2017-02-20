@@ -5,7 +5,7 @@ import main.java.acs.db.dao.SnapshotDao;
 import main.java.acs.entities.Anomaly;
 import main.java.acs.entities.Statistics;
 
-public class AlertObserver implements Observer {
+public class AlertObserver {
 	
 	private AlertSubject subject;
 	
@@ -24,7 +24,6 @@ public class AlertObserver implements Observer {
 		snapshot = profile;
 	}
 
-	@Override
 	public void update() {
 		System.out.println();
 		System.out.print("[acs] Alert recieved: " 

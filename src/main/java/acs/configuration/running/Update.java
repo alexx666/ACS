@@ -6,7 +6,7 @@ public class Update extends RunConfiguration {
 
 	@Override
 	public void run() {
-		getPm().setProcesses(ExternalProcess.OINKMASTER);
-		getPm().startAll(true);
+		processManager.setProcesses(ExternalProcess.OINKMASTER);
+		processManager.startAll(true);
 	}
 }

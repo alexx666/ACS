@@ -6,10 +6,10 @@ import main.java.acs.entities.Alert;
 
 public class AlertSubject {
 	
-	private ArrayList<Observer> observers;
+	private ArrayList<AlertObserver> observers;
 	private Alert alert;
 	
-	public AlertSubject() {	this.observers = new ArrayList<Observer>();	}
+	public AlertSubject() {	this.observers = new ArrayList<AlertObserver>();	}
 	
 	public Alert getAlert() { return alert;	}
 	
@@ -18,12 +18,12 @@ public class AlertSubject {
 		notifyObservers();
 	}
 
-	public void addObserver(Observer newObserver) {
+	public void addObserver(AlertObserver newObserver) {
 		observers.add(newObserver);
 	}
 
 	public void notifyObservers() {
-		for (Observer observer : observers) {
+		for (AlertObserver observer : observers) {
 			observer.update();
 		}
 	}

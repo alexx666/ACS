@@ -6,8 +6,8 @@ public class Profile extends RunConfiguration {
 
 	@Override
 	public void run() {
-		getPm().setProcesses(ExternalProcess.PROFILE2DB, ExternalProcess.CXTRACKER);
-		getPm().startAll(true);
+		processManager.setProcesses(ExternalProcess.PROFILE2DB, ExternalProcess.CXTRACKER);
+		processManager.startAll(true);
 		System.out.println("[acs] Profiling network traffic...");
 		while(running);
 	}

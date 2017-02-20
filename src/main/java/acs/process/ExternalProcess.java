@@ -10,18 +10,18 @@ package main.java.acs.process;
  **/
 public enum ExternalProcess {
 	
-	PROFILE2DB ("profile2DB","profile2db.pl", new Command("profile2db.pl eth2 --dir /var/log/cxtracker/eth2/sessions/ --daemon")),
-	SNAPSHOT2DB ("Snapshot2DB", "snapshot2db.pl", new Command("snapshot2db.pl eth2 --dir /var/log/prads/eth2/sessions/ --daemon")),
-	CXTRACKER ("Cxtracker", "cxtracker", new Command("cxtracker -i eth2 -d /var/log/cxtracker/eth2/sessions/ -D")),
-	PRADS ("PRADS", "prads", new Command("prads -i eth2 -L /var/log/prads/eth2/sessions/ -x -O -D")),
-	OINKMASTER ("Oinkmaster", "oinkmaster", new Command("oinkmaster -o /etc/suricata/rules -q -s")),
-	SURICATA ("Suricata", "Suricata-Main", new Command("suricata -c /etc/suricata/suricata.yaml --pcap=eth1 -D"));
+	PROFILE2DB ("profile2DB","profile2db.pl", "profile2db.pl eth2 --dir /var/log/cxtracker/eth2/sessions/ --daemon"),
+	SNAPSHOT2DB ("Snapshot2DB", "snapshot2db.pl", "snapshot2db.pl eth2 --dir /var/log/prads/eth2/sessions/ --daemon"),
+	CXTRACKER ("Cxtracker", "cxtracker", "cxtracker -i eth2 -d /var/log/cxtracker/eth2/sessions/ -D"),
+	PRADS ("PRADS", "prads", "prads -i eth2 -L /var/log/prads/eth2/sessions/ -x -O -D"),
+	OINKMASTER ("Oinkmaster", "oinkmaster", "oinkmaster -o /etc/suricata/rules -q -s"),
+	SURICATA ("Suricata", "Suricata-Main", "suricata -c /etc/suricata/suricata.yaml --pcap=eth1 -D");
 	
 	private String alias;
 	private String name;
-	private Command command;
+	private String command;
 	
-	private ExternalProcess(String alias, String name, Command command) {
+	private ExternalProcess(String alias, String name, String command) {
 		this.name = name;
 		this.alias = alias;
 		this.command = command;
@@ -29,7 +29,7 @@ public enum ExternalProcess {
 	
 	public String getAlias() { return alias; }
     public String getName() { return name; }
-    public String getCommand() { return command.getCommand(); }
+    public String getCommand() { return command; }
     
-    public void setCommand(String newCommand) { command.setCommand(newCommand); }
+    public void setCommand(String newCommand) { command = newCommand; }
 }
