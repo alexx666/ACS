@@ -4,4 +4,5 @@ public class Suricata {
 	public String inet;
 	public String yaml;
 	public String rules;
+	public String pipe;
 }

@@ -1,5 +1,6 @@
 package main.java.acs.configuration.running;
 
+import main.java.acs.process.ExternalProcess;
 import main.java.acs.process.ProcessManager;
 
 public abstract class RunConfiguration {
@@ -12,13 +13,13 @@ public abstract class RunConfiguration {
 		@Override
 		public void run() {					
 			try {
-				System.out.println();
-				processManager.stopAll(true);
+				processManager.stop(ExternalProcess.SURICATA, false);
 				synchronized (lock) {
 					running = false;
 					lock.notifyAll();
 				}
 				mainThread.join();
+				System.out.println();
 			}catch (InterruptedException e) { e.printStackTrace(); }					
 		}
 	});

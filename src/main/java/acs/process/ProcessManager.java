@@ -9,9 +9,6 @@ import java.util.List;
 
 public class ProcessManager {
 	
-	private static final String bash = "/bin/sh";
-	private static final String c = "-c";
-	
 	private ExternalProcess [] processes;
 	
 	public ExternalProcess[] getProcesses() { return processes;	}
@@ -23,8 +20,8 @@ public class ProcessManager {
 		if(!isActive(process)) {
 			if (verbose) System.out.println("[acs] Starting: " + process.getName());
 			List<String> commands = new ArrayList<String>();
-			commands.add(bash);
-			commands.add(c);
+			commands.add("/bin/sh");
+			commands.add("-c");
 			commands.add(process.getCommand());
 			runProcess(commands, verbose);
 		}else if(verbose) System.out.println("[acs]  " + process.getName() + " is already running");
@@ -49,8 +46,8 @@ public class ProcessManager {
 				if(!isActive(process)) {
 					if (verbose) System.out.println("[acs] Starting: " + process.getName());
 					List<String> commands = new ArrayList<String>();
-					commands.add(bash);
-					commands.add(c);
+					commands.add("/bin/sh");
+					commands.add("-c");
 					commands.add(process.getCommand());
 					runProcess(commands, verbose);
 				}else if(verbose) System.out.println("[acs]  " + process.getName() + " is already running");
@@ -88,7 +85,7 @@ public class ProcessManager {
 		}
 	}
 	
-	private String runProcess(List<String> commands, boolean print) {
+	public static String runProcess(List<String> commands, boolean print) {
 		try {
 	        ProcessBuilder probuilder = new ProcessBuilder(commands);
 	        probuilder.redirectErrorStream(true);
