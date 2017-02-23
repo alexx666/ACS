@@ -89,9 +89,7 @@ public class ProcessManager {
 		try {
 	        ProcessBuilder probuilder = new ProcessBuilder(commands);
 	        probuilder.redirectErrorStream(true);
-	        Process process;
-			
-			process = probuilder.start();
+	        Process process = probuilder.start();
 	        
 	        InputStream is = process.getInputStream();
 	        InputStreamReader isr = new InputStreamReader(is);
