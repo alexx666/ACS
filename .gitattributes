@@ -1,1 +1,1 @@
-*.pl linguist-language=Java
+scripts/ linguist-vendored=false
