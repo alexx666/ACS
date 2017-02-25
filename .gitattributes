@@ -1,1 +1,1 @@
-scripts/ linguist-vendored=false
+*.pl linguist-vendored=false
