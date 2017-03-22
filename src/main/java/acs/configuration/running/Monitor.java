@@ -9,6 +9,7 @@ import main.java.acs.handlers.AlertObserver;
 import main.java.acs.handlers.AlertSubject;
 import main.java.acs.io.Fifo;
 import main.java.acs.process.ExternalProcess;
+import main.java.acs.process.ProcessManager;
 
 public class Monitor extends RunConfiguration {
 	
@@ -31,16 +32,14 @@ public class Monitor extends RunConfiguration {
 				while (running) {
 					String line;
 					if ((line = in.readLine()) != null) {
-						processManager.stop(ExternalProcess.PRADS, false);
 						as.setAlert(new Alert(line));
-						processManager.start(ExternalProcess.PRADS, false);
 					}
 					lock.wait(5);
 				}
 			}
 			in.close();
 			Fifo.removeFifoPipe();
-			processManager.stopAll(false);
+			ProcessManager.stop(ExternalProcess.PRADS, false);
 		}catch (IOException | InterruptedException ex) {
 			ex.printStackTrace();
 		}

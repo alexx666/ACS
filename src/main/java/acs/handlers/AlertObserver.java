@@ -4,6 +4,8 @@ import main.java.acs.db.dao.ProfileDao;
 import main.java.acs.db.dao.SnapshotDao;
 import main.java.acs.entities.Anomaly;
 import main.java.acs.entities.Statistics;
+import main.java.acs.process.ExternalProcess;
+import main.java.acs.process.ProcessManager;
 
 public class AlertObserver {
 	
@@ -30,6 +32,8 @@ public class AlertObserver {
 				+ subject.getAlert().getMessage() 
 				+ " at: [UTC] " + subject.getAlert().getDate());
 		
+		ProcessManager.stop(ExternalProcess.PRADS, false);
+		
 		if (profileDao.isProfileDataEnough()) {	
 			profile = profileDao.getProfile(); 
 		}else System.out.print("[P]");
@@ -41,5 +45,7 @@ public class AlertObserver {
 		System.out.print(" ---> Network ANOMALY of: " 
 				+ Math.round((new Anomaly(profile, snapshot)).getAnomaly()) 
 				+ "/100");
+		
+		ProcessManager.start(ExternalProcess.PRADS, false);
 	}
 }

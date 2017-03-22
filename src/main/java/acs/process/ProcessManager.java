@@ -16,7 +16,7 @@ public class ProcessManager {
 	
 	public void setProcesses(ExternalProcess...processes) {	this.processes = processes; }
 	
-	public void start(ExternalProcess process, boolean verbose) {
+	public static void start(ExternalProcess process, boolean verbose) {
 		if(!isActive(process)) {
 			if (verbose) System.out.println("[acs] Starting: " + process.getName());
 			List<String> commands = new ArrayList<String>();
@@ -27,7 +27,7 @@ public class ProcessManager {
 		}else if(verbose) System.out.println("[acs]  " + process.getName() + " is already running");
 	}
 	
-	public void stop(ExternalProcess process, boolean verbose) {
+	public static void stop(ExternalProcess process, boolean verbose) {
 		if(isActive(process)) {
 			if(verbose) System.out.println("[acs] Stopping: " + process.getName());
 			List<String> commands = new ArrayList<String>();
@@ -71,7 +71,7 @@ public class ProcessManager {
 		}
 	}
 	
-	private boolean isActive(ExternalProcess process) {
+	private static boolean isActive(ExternalProcess process) {
 		List<String> commands = new ArrayList<String>();
 		commands.add("/bin/sh");
 		commands.add("-c");

@@ -8,9 +8,7 @@ import com.mysql.jdbc.Connection;
 import main.java.acs.configuration.yaml.YMLConfiguration;
 
 public class JDBCConnectionPool extends ObjectPool<Connection> {
-	
-	private static JDBCConnectionPool instance = null;
-	
+		
 	private static final String dsn = "jdbc:mysql://localhost/" + YMLConfiguration.getInstance().getTools().trackers.db;
 	private static final String usr = YMLConfiguration.getInstance().getTools().trackers.user;
 	private static final String pwd = YMLConfiguration.getInstance().getTools().trackers.pass;
@@ -18,12 +16,13 @@ public class JDBCConnectionPool extends ObjectPool<Connection> {
 	private JDBCConnectionPool() { 
 		super(); 
 	}
+	
+	private static class Static {
+		private static final JDBCConnectionPool INSTANTE = new JDBCConnectionPool();
+	}
 	  
 	public static JDBCConnectionPool getInstance() {
-		if (instance == null) {	
-			instance = new JDBCConnectionPool(); 
-		}
-		return instance;
+		return Static.INSTANTE;
 	}
 
 	@Override

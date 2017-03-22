@@ -8,18 +8,17 @@ import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 
 public class YMLConfiguration {
-	
-	private static YMLConfiguration instance = null;
-	
+		
 	private Tools tools;
 	
 	private YMLConfiguration() {}
 	
+	private static class Static {
+		private static final YMLConfiguration INSTANCE = new YMLConfiguration();	
+	}
+	
 	public static YMLConfiguration getInstance() {
-		if (instance == null) {	
-			instance = new YMLConfiguration(); 
-		}
-		return instance;
+		return Static.INSTANCE;
 	}
 		
 	public Tools getTools() { return tools; }
