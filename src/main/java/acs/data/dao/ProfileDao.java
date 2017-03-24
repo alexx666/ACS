@@ -15,6 +15,11 @@ import main.java.acs.data.connection.JDBCConnectionPool;
 import main.java.acs.data.entities.Flow;
 import main.java.acs.data.entities.Statistics;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 public class ProfileDao {
 	
 	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());

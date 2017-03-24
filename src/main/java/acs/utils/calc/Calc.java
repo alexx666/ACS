@@ -2,6 +2,11 @@ package main.java.acs.utils.calc;
 
 import java.util.List;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 public class Calc {
 
 	public static double intListDiff(List<Integer> p, List<Integer> s) {

@@ -4,18 +4,23 @@ import java.util.ArrayList;
 
 import main.java.acs.data.entities.Alert;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 public class AlertSubject {
 	
 	private ArrayList<AlertObserver> observers;
-	private Alert alert;
+	private Alert alert; //TODO create previous alert object
 	
-	public AlertSubject() {	this.observers = new ArrayList<AlertObserver>();	}
+	public AlertSubject() {	this.observers = new ArrayList<AlertObserver>(); }
 	
 	public Alert getAlert() { return alert;	}
 	
 	public void setAlert(Alert alert) {	
 		this.alert = alert; 
-		notifyObservers();
+		notifyObservers(); //TODO notify only if new alert time is different from previous alert time
 	}
 
 	public void addObserver(AlertObserver newObserver) {

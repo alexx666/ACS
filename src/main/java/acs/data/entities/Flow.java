@@ -1,5 +1,10 @@
 package main.java.acs.data.entities;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 public class Flow {
 	
 	private String src_ip;

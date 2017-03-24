@@ -7,6 +7,11 @@ import com.mysql.jdbc.Connection;
 
 import main.java.acs.configuration.yaml.YMLConfiguration;
 
+/**
+ * 
+ * 
+ *
+ */
 public class JDBCConnectionPool extends ObjectPool<Connection> {
 		
 	private static final String dsn = "jdbc:mysql://localhost/" + YMLConfiguration.getInstance().getTools().trackers.db;

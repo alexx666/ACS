@@ -10,6 +10,11 @@ import org.apache.commons.cli.ParseException;
 import main.java.acs.configuration.run.RunConfigurationFactory;
 import main.java.acs.configuration.yaml.YMLConfiguration;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 public class ACS {
 	
 	private CommandLineParser parser;
@@ -32,7 +37,7 @@ public class ACS {
 			if (cmd.hasOption("f") && cmd.hasOption("m")) {
 				YMLConfiguration
 					.getInstance()
-					.runWithFile(cmd.getOptionValue("f"));
+					.runWithFile(cmd.getOptionValue("f")); //TODO YMLConfiguration - implement Facade Pattern
 				RunConfigurationFactory
 					.getInstance()
 					.getConfiguration(cmd.getOptionValue("m"))

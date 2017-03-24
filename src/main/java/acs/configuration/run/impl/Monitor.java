@@ -39,7 +39,7 @@ public class Monitor extends RunConfiguration {
 					if ((line = in.readLine()) != null) {
 						as.setAlert(new Alert(line));
 					}
-					lock.wait(10);
+					lock.wait(10); //TODO Optimize wait time
 				}
 			}
 			in.close();

@@ -3,6 +3,11 @@ package main.java.acs.data.connection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+/**
+ * 
+ * 
+ *
+ */
 public abstract class ObjectPool<T> {
 	
 	private long expirationTime;

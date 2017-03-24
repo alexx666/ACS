@@ -3,6 +3,11 @@ package main.java.acs.data.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 public class Anomaly {
 	
 	private Statistics profile;

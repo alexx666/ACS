@@ -1,5 +1,10 @@
 package main.java.acs.data.entities;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 import java.util.ArrayList;
 import java.util.List;
 

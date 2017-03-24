@@ -2,6 +2,11 @@ package main.java.acs.data.entities;
 
 import java.util.Calendar;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 public class Alert {
 
 	private String line;

@@ -6,9 +6,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 public class Dates {
 	
-//	TODO retocar todos estos metodos
 	@SuppressWarnings("deprecation")
 	public static String getTimestampFrom(String line) {	
 		Date today;

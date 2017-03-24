@@ -3,6 +3,8 @@ package main.java.acs.utils.process;
 /**
  * This enumeration defines a runnable command needed for ACS and its components to work
  * 
+ * @author alexx666
+ * 
  * Format of the commands:
  * 
  * 		COMMAND (alias - String, name - String, command - String)

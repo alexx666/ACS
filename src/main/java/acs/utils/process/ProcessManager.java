@@ -18,25 +18,25 @@ public class ProcessManager {
 	
 	public static void start(ExternalProcess process, boolean verbose) {
 		if(!isActive(process)) {
-			if (verbose) System.out.println("[acs] Starting: " + process.getName());
+			if (verbose) System.out.println("[acs] Starting: " + process.getAlias());
 			List<String> commands = new ArrayList<String>();
 			commands.add("/bin/sh");
 			commands.add("-c");
 			commands.add(process.getCommand());
 			runProcess(commands, verbose);
-		}else if(verbose) System.out.println("[acs]  " + process.getName() + " is already running");
+		}else if(verbose) System.out.println("[acs]  " + process.getAlias() + " is already running");
 	}
 	
 	public static void stop(ExternalProcess process, boolean verbose) {
 		if(isActive(process)) {
-			if(verbose) System.out.println("[acs] Stopping: " + process.getName());
+			if(verbose) System.out.println("[acs] Stopping: " + process.getAlias());
 			List<String> commands = new ArrayList<String>();
 			commands.add("sudo");
 			commands.add("-S");
 			commands.add("killall");
 			commands.add(process.getName());
 			runProcess(commands, verbose);
-		}else if(verbose) System.out.println("[acs] " + process.getName() + " is not running");
+		}else if(verbose) System.out.println("[acs] " + process.getAlias() + " is not running");
 	}
 
 	public void startAll(boolean verbose) {
@@ -44,13 +44,13 @@ public class ProcessManager {
 			if (verbose) System.out.println("[acs] Inicializing tools...");
 			for (ExternalProcess process : processes) {
 				if(!isActive(process)) {
-					if (verbose) System.out.println("[acs] Starting: " + process.getName());
+					if (verbose) System.out.println("[acs] Starting: " + process.getAlias());
 					List<String> commands = new ArrayList<String>();
 					commands.add("/bin/sh");
 					commands.add("-c");
 					commands.add(process.getCommand());
 					runProcess(commands, verbose);
-				}else if(verbose) System.out.println("[acs]  " + process.getName() + " is already running");
+				}else if(verbose) System.out.println("[acs]  " + process.getAlias() + " is already running");
 			}
 		}
 	}
@@ -59,14 +59,14 @@ public class ProcessManager {
 		if(processes.length != 0) {
 			for (ExternalProcess process : processes) {
 				if(isActive(process)) {
-					if(verbose) System.out.println("[acs] Stopping: " + process.getName());
+					if(verbose) System.out.println("[acs] Stopping: " + process.getAlias());
 					List<String> commands = new ArrayList<String>();
 					commands.add("sudo");
 					commands.add("-S");
 					commands.add("killall");
 					commands.add(process.getName());
 					runProcess(commands, verbose);
-				}else if(verbose) System.out.println("[acs] " + process.getName() + "  was not running");
+				}else if(verbose) System.out.println("[acs] " + process.getAlias() + "  was not running");
 			}
 		}
 	}

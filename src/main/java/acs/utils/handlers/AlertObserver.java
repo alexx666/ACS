@@ -7,6 +7,11 @@ import main.java.acs.data.entities.Statistics;
 import main.java.acs.utils.process.ExternalProcess;
 import main.java.acs.utils.process.ProcessManager;
 
+/**
+ * 
+ * @author alexx666
+ *
+ */
 public class AlertObserver {
 	
 	private AlertSubject subject;
@@ -27,13 +32,12 @@ public class AlertObserver {
 	}
 
 	public void update() {
-		
 		ProcessManager.stop(ExternalProcess.PRADS, false);
 		
 		if (profileDao.isProfileDataEnough()) {	profile = profileDao.getProfile(); }
 		if (snapshotDao.isSnapshotReady(subject.getAlert().getDate())) { 
 			snapshot = snapshotDao.getSnapshot(subject.getAlert().getDate()); 
-		} 
+		} //TODO Attempt threading both profile and snapshot extraction
 		
 		System.out.println("[acs] Alert recieved: " 
 				+ subject.getAlert().getMessage() 
