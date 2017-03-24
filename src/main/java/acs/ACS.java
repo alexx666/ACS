@@ -7,7 +7,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import main.java.acs.configuration.running.RunConfigurationFactory;
+import main.java.acs.configuration.run.RunConfigurationFactory;
 import main.java.acs.configuration.yaml.YMLConfiguration;
 
 public class ACS {

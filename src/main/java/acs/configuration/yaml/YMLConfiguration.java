@@ -3,12 +3,13 @@ package main.java.acs.configuration.yaml;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import main.java.acs.process.ExternalProcess;
+import main.java.acs.configuration.yaml.parameters.Tools;
+import main.java.acs.utils.process.ExternalProcess;
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 
 public class YMLConfiguration {
-		
+	
 	private Tools tools;
 	
 	private YMLConfiguration() {}
