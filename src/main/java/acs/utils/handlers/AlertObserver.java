@@ -6,10 +6,11 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import main.java.acs.configuration.ACSConfiguration;
-import main.java.acs.data.dao.ProfileDao;
-import main.java.acs.data.dao.SnapshotDao;
-import main.java.acs.data.entities.Anomaly;
-import main.java.acs.data.entities.Statistics;
+import main.java.acs.data.dao.ProfileDAO;
+import main.java.acs.data.dao.SnapshotDAO;
+import main.java.acs.data.dao.factory.DAOFactory;
+import main.java.acs.data.dto.Anomaly;
+import main.java.acs.data.dto.Statistics;
 import main.java.acs.utils.process.ExternalProcess;
 import main.java.acs.utils.process.ProcessManager;
 
@@ -20,12 +21,13 @@ import main.java.acs.utils.process.ProcessManager;
  */
 public class AlertObserver {
 	
-	private static final Logger LOGGER = Logger.getLogger("ACS");
+	private static final Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
 	private static final SimpleFormatter FORMATTER = new SimpleFormatter();
+	private static final String dataSource = ACSConfiguration.getInstance().getSettings().trackers.type;
+	private static final ProfileDAO profileDao = DAOFactory.getDAOFactory(dataSource).getProfileDAO();
+	private static final SnapshotDAO snapshotDao = DAOFactory.getDAOFactory(dataSource).getSnapshotDAO();
 	
 	private AlertSubject subject;
-	private ProfileDao profileDao;
-	private SnapshotDao snapshotDao;
 	private Statistics profile;
 	private Statistics snapshot;
 	
@@ -33,8 +35,6 @@ public class AlertObserver {
 		this.subject = subject;
 		this.subject.addObserver(this);
 		
-		profileDao = new ProfileDao();
-		snapshotDao = new SnapshotDao();
 		profile = profileDao.getFullProfile();
 		snapshot = profile;
 		

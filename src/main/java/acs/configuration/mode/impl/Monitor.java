@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import main.java.acs.configuration.ACSConfiguration;
 import main.java.acs.configuration.mode.RunningMode;
-import main.java.acs.data.entities.Alert;
+import main.java.acs.data.dto.Alert;
 import main.java.acs.utils.handlers.AlertObserver;
 import main.java.acs.utils.handlers.AlertSubject;
 import main.java.acs.utils.process.ExternalProcess;

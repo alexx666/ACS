@@ -6,4 +6,5 @@ public class Trackers {
 	public String db;
 	public String user;
 	public String pass;
+	public String type;
 }

@@ -1,4 +1,4 @@
-package main.java.acs.data.connection;
+package main.java.acs.data.dao.connection.impl;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import com.mysql.jdbc.Connection;
 
 import main.java.acs.configuration.ACSConfiguration;
+import main.java.acs.data.dao.connection.ObjectPool;
 
 /**
  * 

@@ -8,6 +8,7 @@ trackers:
     inet: eth0
     logs: /var/log
     db: cxtracker
+    type: mysql
     user: cxtracker
     pass: cxtracker
 

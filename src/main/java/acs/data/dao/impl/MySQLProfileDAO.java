@@ -1,4 +1,4 @@
-package main.java.acs.data.dao;
+package main.java.acs.data.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,41 +7,34 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 import com.mysql.jdbc.Connection;
 
-import main.java.acs.data.connection.JDBCConnectionPool;
-import main.java.acs.data.entities.Flow;
-import main.java.acs.data.entities.Statistics;
+import main.java.acs.data.dao.ProfileDAO;
+import main.java.acs.data.dao.connection.impl.JDBCConnectionPool;
+import main.java.acs.data.dao.factory.impl.MySQLDAOFactory;
+import main.java.acs.data.dto.Flow;
+import main.java.acs.data.dto.Statistics;
+import main.java.acs.utils.calc.Dates;
 
 /**
  * 
  * @author alexx666
  *
  */
-public class ProfileDao {
-	
-	private static Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
-	
-	private JDBCConnectionPool jdbcpool;
-			
-	public ProfileDao() {
-		this.jdbcpool = JDBCConnectionPool.getInstance();
-	}
-
+public class MySQLProfileDAO implements ProfileDAO {
+					
+	@Override
 	public Statistics getProfile() { 
+		Connection connection = MySQLDAOFactory.createConnection();
+		Statistics profile = null;
 		
-		try {
-			Statistics profile = null;
-
-			Connection connection = jdbcpool.checkOut();
-			
+		try {		
 			Date now = new Date();
 			
-			String startTime = main.java.acs.utils.calc.Dates.addNMinutesToTime(Calendar.getInstance(), -5);
-			String endTime = main.java.acs.utils.calc.Dates.addNMinutesToTime(Calendar.getInstance(), 5);
-			String dayOfWeek = main.java.acs.utils.calc.Dates.toString(now, "EEEE");
+			String startTime = Dates.addNMinutesToTime(Calendar.getInstance(), -5);
+			String endTime = Dates.addNMinutesToTime(Calendar.getInstance(), 5);
+			String dayOfWeek = Dates.toString(now, "EEEE");
 			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from session_nidslinux_VirtualBox_" + dayOfWeek + " where date_format(start_time, '%H:%i:%s') between '"+startTime+"' and '"+endTime+"';";
 			
 			Statement stmt = connection.createStatement();
@@ -68,28 +61,29 @@ public class ProfileDao {
 					
 					cons.add(f);
 		        }
-		        profile = new Statistics(cons);
 		        rs.close();
+		        profile = new Statistics(cons);
 		    }
 		    stmt.close();
-		    jdbcpool.checkIn(connection);
-		    return profile;
 		}catch (SQLException ex){ 
-			LOGGER.info("SQLException: " + ex.getMessage()); 
-			return null;
+			System.out.println("SQLException: " + ex.getMessage()); 
+		}finally{
+    		JDBCConnectionPool.getInstance().checkIn(connection);
 		}
+		return profile;
 	}
 	
+	@Override
 	public Statistics getFullProfile() {
+		Connection connection = MySQLDAOFactory.createConnection();
+		Statistics profile = null;
+		
 		try {
-			Statistics profile = null;
-			Connection connection = jdbcpool.checkOut();
 			Date now = new Date();
-			String dayOfWeek = main.java.acs.utils.calc.Dates.toString(now, "EEEE");
+			String dayOfWeek = Dates.toString(now, "EEEE");
 			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from session_nidslinux_VirtualBox_" + dayOfWeek;
 			Statement stmt = connection.createStatement();
-		    if (stmt.execute(query)) {
-		    	
+		    if (stmt.execute(query)) {	
 		    	List<Flow> cons = new ArrayList<Flow>();
 		    	ResultSet rs = stmt.getResultSet();
 		        
@@ -111,49 +105,43 @@ public class ProfileDao {
 					
 					cons.add(f);
 		        } 
-		        profile = new Statistics(cons);
 		        rs.close();
+		        profile = new Statistics(cons);
 		    }
 		    stmt.close();
-		    jdbcpool.checkIn(connection);
-		    return profile;
 		}catch (SQLException ex){ 
-			LOGGER.info("SQLException: " + ex.getMessage());
-			return null;
+			System.out.println("SQLException: " + ex.getMessage());
+		}finally{
+    		JDBCConnectionPool.getInstance().checkIn(connection);
 		}
+	    return profile;
 	}
 	
+	@Override
 	public boolean isProfileDataEnough() {
-		try {
-			Connection connection = jdbcpool.checkOut();
-			
+		Connection connection = MySQLDAOFactory.createConnection();
+		boolean result = false;
+		try {	
 			Date now = new Date();
-			String startTime = main.java.acs.utils.calc.Dates.addNMinutesToTime(Calendar.getInstance(), -5);
-			String endTime = main.java.acs.utils.calc.Dates.addNMinutesToTime(Calendar.getInstance(), 5);
-			String dayOfWeek = main.java.acs.utils.calc.Dates.toString(now, "EEEE");
+			String startTime = Dates.addNMinutesToTime(Calendar.getInstance(), -5);
+			String endTime = Dates.addNMinutesToTime(Calendar.getInstance(), 5);
+			String dayOfWeek = Dates.toString(now, "EEEE");
 			String query = "select count(*) from session_nidslinux_VirtualBox_" + dayOfWeek + " where date_format(start_time, '%H:%i:%s') between '"+startTime+"' and '"+endTime+"';";
 		    Statement stmt = connection.createStatement();
 		    if (stmt.execute(query)) {
 		    	ResultSet rs = stmt.getResultSet();
 		    	rs.next();
 		    	if (rs.getInt("count(*)") > 0) {
-		    		rs.close();
-		    		stmt.close();
-		    		jdbcpool.checkIn(connection);
-		    		return true;
-		    	}else{
-		    		rs.close();
-		    		stmt.close();
-		    		jdbcpool.checkIn(connection);
-		    		return false;
+		    		result = true;
 		    	}
+	    		rs.close();
 		    }
 		    stmt.close();
-    		jdbcpool.checkIn(connection);
-		    return false;
 		}catch (SQLException ex){ 
-			LOGGER.warning(ex.getMessage());
-			return false;
+			System.out.println(ex.getMessage());
+		}finally{
+    		JDBCConnectionPool.getInstance().checkIn(connection);
 		}
+		return result;
 	}
 }

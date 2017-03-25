@@ -2,7 +2,7 @@ package main.java.acs.utils.handlers;
 
 import java.util.ArrayList;
 
-import main.java.acs.data.entities.Alert;
+import main.java.acs.data.dto.Alert;
 
 /**
  * 

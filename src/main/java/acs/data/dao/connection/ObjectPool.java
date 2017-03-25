@@ -1,4 +1,4 @@
-package main.java.acs.data.connection;
+package main.java.acs.data.dao.connection;
 
 import java.util.Enumeration;
 import java.util.Hashtable;

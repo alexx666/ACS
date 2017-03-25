@@ -1,4 +1,4 @@
-package main.java.acs.data.entities;
+package main.java.acs.data.dto;
 
 import java.util.Calendar;
 
