@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import com.mysql.jdbc.Connection;
 
-import main.java.acs.configuration.yaml.YMLConfiguration;
+import main.java.acs.configuration.ACSConfiguration;
 
 /**
  * 
@@ -14,9 +14,9 @@ import main.java.acs.configuration.yaml.YMLConfiguration;
  */
 public class JDBCConnectionPool extends ObjectPool<Connection> {
 		
-	private static final String dsn = "jdbc:mysql://localhost/" + YMLConfiguration.getInstance().getTools().trackers.db;
-	private static final String usr = YMLConfiguration.getInstance().getTools().trackers.user;
-	private static final String pwd = YMLConfiguration.getInstance().getTools().trackers.pass;
+	private static final String dsn = "jdbc:mysql://localhost/" + ACSConfiguration.getInstance().getSettings().trackers.db;
+	private static final String usr = ACSConfiguration.getInstance().getSettings().trackers.user;
+	private static final String pwd = ACSConfiguration.getInstance().getSettings().trackers.pass;
 	  
 	private JDBCConnectionPool() { 
 		super(); 

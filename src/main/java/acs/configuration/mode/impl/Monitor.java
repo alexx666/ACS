@@ -1,19 +1,19 @@
-package main.java.acs.configuration.run.impl;
+package main.java.acs.configuration.mode.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import main.java.acs.configuration.run.RunConfiguration;
-import main.java.acs.configuration.yaml.YMLConfiguration;
+import main.java.acs.configuration.ACSConfiguration;
+import main.java.acs.configuration.mode.RunningMode;
 import main.java.acs.data.entities.Alert;
 import main.java.acs.utils.handlers.AlertObserver;
 import main.java.acs.utils.handlers.AlertSubject;
 import main.java.acs.utils.process.ExternalProcess;
 import main.java.acs.utils.process.ProcessManager;
 
-public class Monitor extends RunConfiguration {
+public class Monitor extends RunningMode {
 	
 	@Override
 	public void run() {
@@ -24,7 +24,7 @@ public class Monitor extends RunConfiguration {
 		processManager.startAll(true);
 		
 		try {
-			File inputFile = new File(YMLConfiguration.getInstance().getTools().suricata.fast);
+			File inputFile = new File(ACSConfiguration.getInstance().getSettings().suricata.fast);
 			
 			System.out.println("[acs] Connecting to Suricata...");
 			while (inputFile.length()!=0);

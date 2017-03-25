@@ -1,8 +1,8 @@
-package main.java.acs.configuration.run;
+package main.java.acs.configuration.mode;
 
 import main.java.acs.utils.process.ProcessManager;
 
-public abstract class RunConfiguration {
+public abstract class RunningMode {
 	
 	protected volatile boolean running = true;
 	protected volatile ProcessManager processManager = new ProcessManager();
@@ -22,7 +22,7 @@ public abstract class RunConfiguration {
 		}
 	});
 	
-	public RunConfiguration() {
+	public RunningMode() {
 		Runtime.getRuntime().addShutdownHook(shutdownhook);
 	}
 	

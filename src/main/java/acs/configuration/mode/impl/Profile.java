@@ -1,9 +1,9 @@
-package main.java.acs.configuration.run.impl;
+package main.java.acs.configuration.mode.impl;
 
-import main.java.acs.configuration.run.RunConfiguration;
+import main.java.acs.configuration.mode.RunningMode;
 import main.java.acs.utils.process.ExternalProcess;
 
-public class Profile extends RunConfiguration {
+public class Profile extends RunningMode {
 
 	@Override
 	public void run() {

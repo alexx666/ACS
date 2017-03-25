@@ -1,4 +1,4 @@
-package main.java.acs.configuration.yaml.parameters;
+package main.java.acs.configuration.settings;
 
 public class Suricata {
 	public String inet;

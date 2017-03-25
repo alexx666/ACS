@@ -11,4 +11,5 @@ trackers:
     user: cxtracker
     pass: cxtracker
 
-#outputs:
+outputs:
+    file: /home/nids-linux/acs.log
