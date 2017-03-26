@@ -15,7 +15,7 @@ import main.java.acs.data.dao.connection.impl.JDBCConnectionPool;
 import main.java.acs.data.dao.factory.impl.MySQLDAOFactory;
 import main.java.acs.data.dto.Flow;
 import main.java.acs.data.dto.Statistics;
-import main.java.acs.utils.Dates;
+import main.java.acs.utils.formatters.Dates;
 
 /**
  * 
@@ -25,16 +25,18 @@ import main.java.acs.utils.Dates;
 public class MySQLProfileDAO implements ProfileDAO {
 					
 	@Override
-	public Statistics getProfile() { 
+	public Statistics getProfile(String hour) { 
 		Connection connection = MySQLDAOFactory.createConnection();
 		Statistics profile = null;
 		
-		try {		
-			Date now = new Date();
+		try {					
+			Calendar cal = Dates.getCalendarFrom(hour);
+			cal.add(Calendar.HOUR, -2);
+						
+			String startTime = Dates.addNMinutesToTime(cal, -5);
+			String endTime = Dates.addNMinutesToTime(cal, 10);
+			String dayOfWeek = Dates.toString(cal.getTime(), "EEEE", "UTC");
 			
-			String startTime = Dates.addNMinutesToTime(Calendar.getInstance(), -5);
-			String endTime = Dates.addNMinutesToTime(Calendar.getInstance(), 5);
-			String dayOfWeek = Dates.toString(now, "EEEE");
 			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from session_nidslinux_VirtualBox_" + dayOfWeek + " where date_format(start_time, '%H:%i:%s') between '"+startTime+"' and '"+endTime+"';";
 			
 			Statement stmt = connection.createStatement();
@@ -80,7 +82,7 @@ public class MySQLProfileDAO implements ProfileDAO {
 		
 		try {
 			Date now = new Date();
-			String dayOfWeek = Dates.toString(now, "EEEE");
+			String dayOfWeek = Dates.toString(now, "EEEE", "UTC");
 			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from session_nidslinux_VirtualBox_" + dayOfWeek;
 			Statement stmt = connection.createStatement();
 		    if (stmt.execute(query)) {	
@@ -118,14 +120,19 @@ public class MySQLProfileDAO implements ProfileDAO {
 	}
 	
 	@Override
-	public boolean isProfileDataEnough() {
+	public boolean isProfileDataEnough(String hour) {
 		Connection connection = MySQLDAOFactory.createConnection();
 		boolean result = false;
 		try {	
 			Date now = new Date();
-			String startTime = Dates.addNMinutesToTime(Calendar.getInstance(), -5);
-			String endTime = Dates.addNMinutesToTime(Calendar.getInstance(), 5);
-			String dayOfWeek = Dates.toString(now, "EEEE");
+			
+			Calendar cal = Dates.getCalendarFrom(hour);
+			cal.add(Calendar.HOUR, -2);
+			
+			String startTime = Dates.addNMinutesToTime(cal, -5);
+			String endTime = Dates.addNMinutesToTime(cal, 10);
+			String dayOfWeek = Dates.toString(now, "EEEE", "UTC");
+						
 			String query = "select count(*) from session_nidslinux_VirtualBox_" + dayOfWeek + " where date_format(start_time, '%H:%i:%s') between '"+startTime+"' and '"+endTime+"';";
 		    Statement stmt = connection.createStatement();
 		    if (stmt.execute(query)) {

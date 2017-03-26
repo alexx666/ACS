@@ -2,6 +2,8 @@ package main.java.acs.data.dto;
 
 import java.util.Calendar;
 
+import main.java.acs.utils.formatters.Dates;
+
 /**
  * 
  * @author alexx666
@@ -18,9 +20,13 @@ public class Alert {
 		return components[2];
 	}
 	
-	public String getDate() {
-		String time = main.java.acs.utils.Dates.getTimestampFrom(line);
-		Calendar cal = main.java.acs.utils.Dates.toCal(time);
-		return main.java.acs.utils.Dates.addNHoursToTime(cal, -2);
+	public String getTimestamp() {
+		String time = Dates.getTimestampFrom(line);
+		Calendar cal = Dates.getCalendarFrom(time);
+		return Dates.addNHoursToTime(cal, -2);
+	}
+	
+	public String getHour() {
+		return Dates.getTimestampFrom(line);
 	}
 }

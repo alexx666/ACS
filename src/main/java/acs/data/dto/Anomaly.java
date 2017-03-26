@@ -3,7 +3,7 @@ package main.java.acs.data.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.acs.utils.Calc;
+import main.java.acs.utils.calc.StatDiff;
 
 /**
  * 
@@ -27,17 +27,17 @@ public class Anomaly {
 		
 		List<Double> statList = new ArrayList<Double>();
 		
-		statList.add(Calc.stringListDiff(profile.getSrcIps(), snapshot.getSrcIps()));
-		statList.add(Calc.stringListDiff(profile.getDstIps(), snapshot.getDstIps()));
-		statList.add(Calc.intListDiff(profile.getIpProtos(), snapshot.getIpProtos()));
-		statList.add(Calc.stringListDiff(profile.getSrcPorts(), snapshot.getSrcPorts()));
-		statList.add(Calc.stringListDiff(profile.getDstPorts(), snapshot.getDstPorts()));
-		statList.add(Calc.diff(profile.getAverageSrcPkts(), snapshot.getAverageSrcPkts()));
-		statList.add(Calc.diff(profile.getAverageDstPkts(), snapshot.getAverageDstPkts()));
-		statList.add(Calc.diff(profile.getAverageSrcBytes(), snapshot.getAverageSrcBytes()));
-		statList.add(Calc.diff(profile.getAverageDstBytes(), snapshot.getAverageDstBytes()));
-		statList.add(Calc.diff(profile.getAverageDuration(), snapshot.getAverageDuration()));
+		statList.add(StatDiff.stringListDiff(profile.getSrcIps(), snapshot.getSrcIps()));
+		statList.add(StatDiff.stringListDiff(profile.getDstIps(), snapshot.getDstIps()));
+		statList.add(StatDiff.intListDiff(profile.getIpProtos(), snapshot.getIpProtos()));
+		statList.add(StatDiff.stringListDiff(profile.getSrcPorts(), snapshot.getSrcPorts()));
+		statList.add(StatDiff.stringListDiff(profile.getDstPorts(), snapshot.getDstPorts()));
+		statList.add(StatDiff.diff(profile.getAverageSrcPkts(), snapshot.getAverageSrcPkts()));
+		statList.add(StatDiff.diff(profile.getAverageDstPkts(), snapshot.getAverageDstPkts()));
+		statList.add(StatDiff.diff(profile.getAverageSrcBytes(), snapshot.getAverageSrcBytes()));
+		statList.add(StatDiff.diff(profile.getAverageDstBytes(), snapshot.getAverageDstBytes()));
+		statList.add(StatDiff.diff(profile.getAverageDuration(), snapshot.getAverageDuration()));
 		
-		return 10 * Calc.sum(statList);
+		return 10 * StatDiff.sum(statList);
 	}
 }
