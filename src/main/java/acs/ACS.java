@@ -28,7 +28,6 @@ public class ACS {
 		
         options.addOption("m", "mode", true, "Select between 'monitor', 'profiler' and 'updater'.");	
         options.addOption("f", "file", true, "Path to acs.yml configuration file.");
-        options.addOption("c", "clean", false, "Clear all existing snapshot data from DB.");
         options.addOption("h", "help", false, "Show this message.");
 	}
 	
@@ -44,10 +43,8 @@ public class ACS {
 			}else{
 				formatter.printHelp("acs [option]", options);
 			}
-		}catch (ParseException e) {
+		}catch (ParseException | NullPointerException e) {
 			formatter.printHelp("acs [option]", options);
-		}catch (NullPointerException e) {
-			System.out.println("[acs] Error: Invalid mode!");
 		}
 	}
 	

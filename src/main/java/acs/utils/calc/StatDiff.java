@@ -1,4 +1,4 @@
-package main.java.acs.utils;
+package main.java.acs.utils.calc;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import java.util.List;
  * @author alexx666
  *
  */
-public class Calc {
+public class StatDiff {
 
 	public static double intListDiff(List<Integer> p, List<Integer> s) {
 		int counter = 0;

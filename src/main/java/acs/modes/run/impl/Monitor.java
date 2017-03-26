@@ -25,7 +25,7 @@ public class Monitor extends RunningMode {
 		JDBCConnectionPool.getInstance().setPwd(settings.getTrackers().getPass());
 		
 		AlertSubject as = new AlertSubject();
-		new AlertObserver(as, settings.getOutputs().getFile(), settings.getTrackers().getType());
+		new AlertObserver(as, settings.getOutputs().getFile(), settings.getOutputs().shouldAppend(), settings.getTrackers().getType());
 						
 		processManager.setProcesses(ExternalProcess.SURICATA, ExternalProcess.SNAPSHOT2DB, ExternalProcess.PRADS);
 		processManager.startAll(true);
