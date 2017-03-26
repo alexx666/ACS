@@ -1,0 +1,16 @@
+suricata: 
+    inet: eth0
+    yaml: /etc/suricata/suricata.yaml
+    rules: /etc/suricata/rules
+    fast: /var/log/suricata/fast.log
+
+trackers:
+    inet: eth0
+    logs: /var/log
+    db: cxtracker
+    type: mysql
+    user: cxtracker
+    pass: cxtracker
+
+outputs:
+    file: /home/nids-linux/acs.log
