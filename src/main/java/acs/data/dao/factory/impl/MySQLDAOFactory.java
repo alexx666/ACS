@@ -6,8 +6,8 @@ import main.java.acs.data.dao.ProfileDAO;
 import main.java.acs.data.dao.SnapshotDAO;
 import main.java.acs.data.dao.connection.impl.JDBCConnectionPool;
 import main.java.acs.data.dao.factory.DAOFactory;
-import main.java.acs.data.dao.impl.MySQLProfileDAO;
-import main.java.acs.data.dao.impl.MySQLSnapshotDAO;
+import main.java.acs.data.dao.impl.mysql.MySQLProfileDAO;
+import main.java.acs.data.dao.impl.mysql.MySQLSnapshotDAO;
 
 public class MySQLDAOFactory extends DAOFactory {
 	
@@ -24,5 +24,4 @@ public class MySQLDAOFactory extends DAOFactory {
 	public SnapshotDAO getSnapshotDAO() {
 		return new MySQLSnapshotDAO();
 	}
-
 }

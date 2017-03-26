@@ -7,7 +7,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import main.java.acs.configuration.ACSConfiguration;
+import main.java.acs.modes.run.RunningMode;
+import main.java.acs.modes.run.RunningModeFactory;
 
 /**
  * 
@@ -35,11 +36,11 @@ public class ACS {
 		try {
 			CommandLine cmd = parser.parse(options, args);
 			if (cmd.hasOption("f") && cmd.hasOption("m")) {
-				ACSConfiguration.getInstance().setSettingsFromFile(cmd.getOptionValue("f"));
-				ACSConfiguration.getInstance().prepareLogFiles();
-				ACSConfiguration.getInstance().prepareDatabase(cmd.hasOption("c"));
-				ACSConfiguration.getInstance().setExternalProcessCommands();
-				ACSConfiguration.getInstance().getConfiguration(cmd.getOptionValue("m")).run();
+				RunningMode rm = RunningModeFactory.getConfiguration(cmd.getOptionValue("m"));
+				rm.setSettingsFromFile(cmd.getOptionValue("f"));
+				rm.setExternalProcessCommands();
+				rm.createOutputFile();
+				rm.run();
 			}else{
 				formatter.printHelp("acs [option]", options);
 			}

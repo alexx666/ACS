@@ -3,7 +3,7 @@ package main.java.acs.data.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.acs.utils.calc.Calc;
+import main.java.acs.utils.Calc;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package main.java.acs.utils.process;
+package main.java.acs.modes.process;
 
 /**
  * This enumeration defines a runnable command needed for ACS and its components to work

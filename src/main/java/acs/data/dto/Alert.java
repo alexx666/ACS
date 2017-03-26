@@ -19,8 +19,8 @@ public class Alert {
 	}
 	
 	public String getDate() {
-		String time = main.java.acs.utils.calc.Dates.getTimestampFrom(line);
-		Calendar cal = main.java.acs.utils.calc.Dates.toCal(time);
-		return main.java.acs.utils.calc.Dates.addNHoursToTime(cal, -2);
+		String time = main.java.acs.utils.Dates.getTimestampFrom(line);
+		Calendar cal = main.java.acs.utils.Dates.toCal(time);
+		return main.java.acs.utils.Dates.addNHoursToTime(cal, -2);
 	}
 }

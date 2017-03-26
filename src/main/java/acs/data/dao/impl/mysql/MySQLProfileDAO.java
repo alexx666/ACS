@@ -1,4 +1,4 @@
-package main.java.acs.data.dao.impl;
+package main.java.acs.data.dao.impl.mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ import main.java.acs.data.dao.connection.impl.JDBCConnectionPool;
 import main.java.acs.data.dao.factory.impl.MySQLDAOFactory;
 import main.java.acs.data.dto.Flow;
 import main.java.acs.data.dto.Statistics;
-import main.java.acs.utils.calc.Dates;
+import main.java.acs.utils.Dates;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package main.java.acs.utils.calc;
+package main.java.acs.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

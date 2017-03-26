@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import com.mysql.jdbc.Connection;
 
-import main.java.acs.configuration.ACSConfiguration;
 import main.java.acs.data.dao.connection.ObjectPool;
 
 /**
@@ -14,10 +13,10 @@ import main.java.acs.data.dao.connection.ObjectPool;
  *
  */
 public class JDBCConnectionPool extends ObjectPool<Connection> {
-		
-	private static final String dsn = "jdbc:mysql://localhost/" + ACSConfiguration.getInstance().getSettings().trackers.db;
-	private static final String usr = ACSConfiguration.getInstance().getSettings().trackers.user;
-	private static final String pwd = ACSConfiguration.getInstance().getSettings().trackers.pass;
+	
+	private String dsn; // = "jdbc:mysql://localhost/" + ACSConfiguration.getInstance().getSettings().trackers.db;
+	private String usr;
+	private String pwd;
 	  
 	private JDBCConnectionPool() { 
 		super(); 
@@ -30,6 +29,10 @@ public class JDBCConnectionPool extends ObjectPool<Connection> {
 	public static JDBCConnectionPool getInstance() {
 		return Static.INSTANTE;
 	}
+
+	public void setDsn(String dsn) { this.dsn = dsn; }
+	public void setUsr(String usr) { this.usr = usr; }
+	public void setPwd(String pwd) { this.pwd = pwd; }
 
 	@Override
 	protected Connection create() {

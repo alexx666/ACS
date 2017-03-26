@@ -1,18 +1,17 @@
-package main.java.acs.utils.handlers;
+package main.java.acs.modes.handlers;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import main.java.acs.configuration.ACSConfiguration;
 import main.java.acs.data.dao.ProfileDAO;
 import main.java.acs.data.dao.SnapshotDAO;
 import main.java.acs.data.dao.factory.DAOFactory;
 import main.java.acs.data.dto.Anomaly;
 import main.java.acs.data.dto.Statistics;
-import main.java.acs.utils.process.ExternalProcess;
-import main.java.acs.utils.process.ProcessManager;
+import main.java.acs.modes.process.ExternalProcess;
+import main.java.acs.modes.process.ProcessManager;
 
 /**
  * 
@@ -23,23 +22,24 @@ public class AlertObserver {
 	
 	private static final Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
 	private static final SimpleFormatter FORMATTER = new SimpleFormatter();
-	private static final String dataSource = ACSConfiguration.getInstance().getSettings().trackers.type;
-	private static final ProfileDAO profileDao = DAOFactory.getDAOFactory(dataSource).getProfileDAO();
-	private static final SnapshotDAO snapshotDao = DAOFactory.getDAOFactory(dataSource).getSnapshotDAO();
 	
 	private AlertSubject subject;
+	private ProfileDAO profileDao;
+	private SnapshotDAO snapshotDao; 
 	private Statistics profile;
 	private Statistics snapshot;
 	
-	public AlertObserver(AlertSubject subject) {
+	public AlertObserver(AlertSubject subject, String dumpFile, String dataSource) {
 		this.subject = subject;
 		this.subject.addObserver(this);
+		this.profileDao = DAOFactory.getDAOFactory(dataSource).getProfileDAO();
+		this.snapshotDao= DAOFactory.getDAOFactory(dataSource).getSnapshotDAO();
 		
 		profile = profileDao.getFullProfile();
 		snapshot = profile;
 		
 		try {
-			FileHandler fh = new FileHandler(ACSConfiguration.getInstance().getSettings().outputs.file, true);
+			FileHandler fh = new FileHandler(dumpFile, true);
 			fh.setFormatter(FORMATTER);
 			LOGGER.addHandler(fh);
 		} catch (SecurityException | IOException e) {

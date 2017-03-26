@@ -1,4 +1,4 @@
-package main.java.acs.data.dao.impl;
+package main.java.acs.data.dao.impl.mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
