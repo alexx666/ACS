@@ -16,13 +16,12 @@ public class Profiler extends RunningMode {
 	@Override
 	public void setExternalProcessCommands() {		
 		String profileCommand = "profile2db.pl " 
-				+ settings.getTrackers().getInet() + " --dir "
-				+ settings.getTrackers().getLogs() + "/cxtracker/" 
-				+ settings.getTrackers().getInet() + "/sessions --daemon";
+				+ "--dir " + settings.getTrackers().getLogs() + "/cxtracker/" 
+				+ settings.getTrackers().getInet() + "/sessions/ --daemon";
 		String cxtrackerCommand = "cxtracker -i " 
 				+ settings.getTrackers().getInet() + " -d "
 				+ settings.getTrackers().getLogs() + "/cxtracker/"
-				+ settings.getTrackers().getInet() + "/sessions -D";
+				+ settings.getTrackers().getInet() + "/sessions/ -D";
 		
 		ExternalProcess.PROFILE2DB.setCommand(profileCommand);
 		ExternalProcess.CXTRACKER.setCommand(cxtrackerCommand);

@@ -33,7 +33,7 @@ profile2db.pl - Load session metadata from cxtracker into a db
  --hostname     : specify the hostname
  --debug        : enable debug messages (default: 0 (disabled))
  --help         : this help message
- --version      : show cxtracker2db.pl version
+ --version      : show version
  --format       : "indexed" or "standard" database format
 
 =cut
@@ -48,8 +48,8 @@ our $TIMEOUT       = 5;
 our $HOSTNAME      = hostname;
 my  $SDIR          = "";
 my  $FDIR          = "";
-my  $LOGFILE       = q(/var/log/cxtracker2db.log);
-my  $PIDFILE       = q(/var/run/cxtracker2db.pid);
+my  $LOGFILE       = q(/var/log/profile2db.log);
+my  $PIDFILE       = q(/var/run/profile2db.pid);
 our $DB_NAME       = "cxtracker";
 our $DB_HOST       = "127.0.0.1";
 our $DB_PORT       = "3306";

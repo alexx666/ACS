@@ -12,12 +12,12 @@ package main.java.acs.modes.process;
  **/
 public enum ExternalProcess {
 	
-	PROFILE2DB ("profile2DB","profile2db.pl", "profile2db.pl eth2 --dir /var/log/cxtracker/eth2/sessions/ --daemon"),
-	SNAPSHOT2DB ("Snapshot2DB", "snapshot2db.pl", "snapshot2db.pl eth2 --dir /var/log/prads/eth2/sessions/ --daemon"),
-	CXTRACKER ("Cxtracker", "cxtracker", "cxtracker -i eth2 -d /var/log/cxtracker/eth2/sessions/ -D"),
-	PRADS ("PRADS", "prads", "prads -i eth2 -L /var/log/prads/eth2/sessions/ -x -O -D"),
-	OINKMASTER ("Oinkmaster", "oinkmaster", "oinkmaster -o /etc/suricata/rules -q -s"),
-	SURICATA ("Suricata", "Suricata-Main", "suricata -c /etc/suricata/suricata.yaml --pcap=eth1 -D");
+	PROFILE2DB ("profile2DB","profile2db.pl", ""),
+	SNAPSHOT2DB ("Snapshot2DB", "snapshot2db.pl", ""),
+	CXTRACKER ("Cxtracker", "cxtracker", ""),
+	PRADS ("PRADS", "prads", ""),
+	OINKMASTER ("Oinkmaster", "oinkmaster", ""),
+	SURICATA ("Suricata", "Suricata-Main", "");
 	
 	private String alias;
 	private String name;

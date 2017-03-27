@@ -63,13 +63,12 @@ public class Monitor extends RunningMode {
 				+ settings.getSuricata().getYaml() + " --pcap=" 
 				+ settings.getSuricata().getInet() + " -D";
 		String snapshotCommand = "snapshot2db.pl " 
-				+ settings.getTrackers().getInet() + " --dir "
-				+ settings.getTrackers().getLogs() + "/prads/" 
-				+ settings.getTrackers().getInet() + "/sessions --daemon";
+				+ "--dir " + settings.getTrackers().getLogs() + "/prads/" 
+				+ settings.getTrackers().getInet() + "/sessions/ --daemon";
 		String pradsCommand = "prads -i " 
-				+ settings.getTrackers().getInet() + " -d "
+				+ settings.getTrackers().getInet() + " -L "
 				+ settings.getTrackers().getLogs() + "/prads/"
-				+ settings.getTrackers().getInet() + "/sessions -x -O -D";
+				+ settings.getTrackers().getInet() + "/sessions/ -D";
 		
 		ExternalProcess.SURICATA.setCommand(suricataCommand);
 		ExternalProcess.SNAPSHOT2DB.setCommand(snapshotCommand);
