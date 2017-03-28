@@ -1,6 +1,7 @@
 package main.java.acs.modes.handlers;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -37,7 +38,7 @@ public class AlertObserver {
 		this.subject.addObserver(this);
 		this.profileDao = DAOFactory.getDAOFactory(dataSource).getProfileDAO();
 		this.snapshotDao= DAOFactory.getDAOFactory(dataSource).getSnapshotDAO();
-		this.profile = profileDao.getFullProfile();
+		this.profile = profileDao.getFullProfile(new Date());
 		this.snapshot = profile;
 		this.oldAnomaly = new Anomaly(profile, snapshot);
 		
@@ -51,14 +52,14 @@ public class AlertObserver {
 	}
 
 	public void update() {
-		if (oldAlert == null || subject.getAlert().getTimestamp() != oldAlert.getTimestamp()) {
+		if (oldAlert == null || subject.getAlert().getHour().toString() != oldAlert.getHour().toString()) {
 			ProcessManager.stop(ExternalProcess.PRADS, false);
 			
 			if (profileDao.isProfileDataEnough(subject.getAlert().getHour())) {	
 				profile = profileDao.getProfile(subject.getAlert().getHour()); 
 			}
-			if (snapshotDao.isSnapshotReady(subject.getAlert().getTimestamp())) { 
-				snapshot = snapshotDao.getSnapshot(subject.getAlert().getTimestamp()); 
+			if (snapshotDao.isSnapshotReady(subject.getAlert().getHour())) { 
+				snapshot = snapshotDao.getSnapshot(subject.getAlert().getHour()); 
 			} //TODO Attempt threading both profile and snapshot extraction
 				
 			oldAnomaly = new Anomaly(profile, snapshot);
@@ -66,6 +67,7 @@ public class AlertObserver {
 			ProcessManager.start(ExternalProcess.PRADS, false);
 			
 		}
+		
 		LOGGER.warning(subject.getAlert().getMessage() 
 					+ " ---> Network ANOMALY of: " 
 					+ Math.round(oldAnomaly.getAnomaly()) 

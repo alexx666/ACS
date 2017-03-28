@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.mysql.jdbc.Connection;
@@ -13,6 +14,7 @@ import main.java.acs.data.dao.connection.impl.JDBCConnectionPool;
 import main.java.acs.data.dao.factory.impl.MySQLDAOFactory;
 import main.java.acs.data.dto.Flow;
 import main.java.acs.data.dto.Statistics;
+import main.java.acs.utils.formatters.Dates;
 
 /**
  * 
@@ -22,11 +24,11 @@ import main.java.acs.data.dto.Statistics;
 public class MySQLSnapshotDAO implements SnapshotDAO {
 				
 	@Override
-	public Statistics getSnapshot(String time) {
+	public Statistics getSnapshot(Date time) {
 		Connection connection = MySQLDAOFactory.createConnection();
 		Statistics result = null;
 		try {	
-			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from snapshot_session_nidslinux_VirtualBox where end_time >= '" + time + "';";
+			String query = "select INET_NTOA(src_ip), INET_NTOA(dst_ip), src_port, dst_port, src_pkts, dst_pkts, src_bytes, dst_bytes, ip_proto, duration from snapshot_session_nidslinux_VirtualBox where end_time >= '" + Dates.formatToGMT(time) + "';";
 		    Statement stmt = connection.createStatement();
 		    if (stmt.execute(query)) {
 		        List<Flow> cons = new ArrayList<Flow>();
@@ -63,11 +65,11 @@ public class MySQLSnapshotDAO implements SnapshotDAO {
 	}
 	
 	@Override
-	public boolean isSnapshotReady(String time) {
+	public boolean isSnapshotReady(Date time) {
 		Connection connection = MySQLDAOFactory.createConnection();	
 		boolean result = false;
 		try {
-			String query = "select count(*) from snapshot_session_nidslinux_VirtualBox where end_time >= '" + time + "';";
+			String query = "select count(*) from snapshot_session_nidslinux_VirtualBox where end_time >= '" + Dates.formatToGMT(time) + "';";
 		    Statement stmt = connection.createStatement();
 		    if (stmt.execute(query)) {
 		    	ResultSet rs = stmt.getResultSet();
