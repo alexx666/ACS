@@ -14,7 +14,7 @@ import main.java.acs.data.dao.connection.ObjectPool;
  */
 public class JDBCConnectionPool extends ObjectPool<Connection> {
 	
-	private String dsn; // = "jdbc:mysql://localhost/" + ACSConfiguration.getInstance().getSettings().trackers.db;
+	private String dsn;
 	private String usr;
 	private String pwd;
 	  

@@ -12,7 +12,7 @@ import main.java.acs.data.dto.Alert;
 public class AlertSubject {
 	
 	private ArrayList<AlertObserver> observers;
-	private Alert alert; //TODO create previous alert object
+	private Alert alert; 
 	
 	public AlertSubject() {	this.observers = new ArrayList<AlertObserver>(); }
 	
@@ -20,7 +20,7 @@ public class AlertSubject {
 	
 	public void setAlert(Alert alert) {	
 		this.alert = alert; 
-		notifyObservers(); //TODO notify only if new alert time is different from previous alert time
+		notifyObservers();
 	}
 
 	public void addObserver(AlertObserver newObserver) {
