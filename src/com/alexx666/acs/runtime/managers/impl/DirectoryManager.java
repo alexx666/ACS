@@ -20,12 +20,12 @@ public class DirectoryManager extends Manager<Path> {
 	
 	@Override
 	public void createAll() {
-		this.createAll("");
+		createAll("");
 	}
 
 	@Override
 	public void destroyAll() {
-		this.destroyAll("");
+		destroyAll("");
 	}
 	
 	public static void create(Path path, String permissions) {

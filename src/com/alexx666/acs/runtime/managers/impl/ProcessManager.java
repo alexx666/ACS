@@ -42,12 +42,7 @@ public class ProcessManager extends Manager<ExternalProcess> {
 			System.out.println("[acs] Inicializing tools...");
 			for (ExternalProcess process : things) {
 				if(!isActive(process)) {
-					if (verbose) System.out.println("[acs] Starting: " + process.getAlias());
-					List<String> commands = new ArrayList<String>();
-					commands.add("/bin/sh");
-					commands.add("-c");
-					commands.add(process.getCommand());
-					runProcess(commands, verbose);
+					create(process, verbose);
 				}else if(verbose) System.out.println("[acs]  " + process.getAlias() + " is already running");
 			}
 		}
@@ -57,13 +52,7 @@ public class ProcessManager extends Manager<ExternalProcess> {
 		if(things.length != 0) {
 			for (ExternalProcess process : things) {
 				if(isActive(process)) {
-					if(verbose) System.out.println("[acs] Stopping: " + process.getAlias());
-					List<String> commands = new ArrayList<String>();
-					commands.add("sudo");
-					commands.add("-S");
-					commands.add("killall");
-					commands.add(process.getName());
-					runProcess(commands, verbose);
+					destroy(process, verbose);
 				}else if(verbose) System.out.println("[acs] " + process.getAlias() + "  was not running");
 			}
 		}
@@ -71,12 +60,12 @@ public class ProcessManager extends Manager<ExternalProcess> {
 	
 	@Override
 	public void createAll() {
-		this.createAll(false);
+		createAll(false);
 	}
 
 	@Override
 	public void destroyAll() {
-		this.destroyAll(false);
+		destroyAll(false);
 	}
 	
 	private static boolean isActive(ExternalProcess process) {
