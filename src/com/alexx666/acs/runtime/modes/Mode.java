@@ -21,7 +21,7 @@ public abstract class Mode {
 		@Override
 		public void run() {					
 			try {
-				processManager.destroyAll();
+				processManager.destroyAll(false);
 				synchronized (lock) {
 					running = false;
 					lock.notifyAll();
@@ -36,7 +36,6 @@ public abstract class Mode {
 	}
 	
 	public void setSettingsFromFile(String filePath) {
-		//TODO read file ONCE using DAO Abstract Factory pattern
 		try {
 			YamlReader reader = new YamlReader(new FileReader(filePath));
 			this.settings = reader.read(Settings.class);

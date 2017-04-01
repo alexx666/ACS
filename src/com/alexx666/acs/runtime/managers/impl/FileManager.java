@@ -1,5 +1,6 @@
 package com.alexx666.acs.runtime.managers.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,33 +9,32 @@ import com.alexx666.acs.runtime.managers.Manager;
 
 public class FileManager extends Manager<Path> {
 		
-	public void createAll(String permissions) {
+	@Override
+	public void createAll(boolean areDirs) {
 		for (Path file : things) {
-			create(file, permissions);
+			create(file, areDirs);
 		}
 	}
 	
-	public void destroyAll(String permissions) {
-		// TODO Auto-generated method stub
-	}
-
 	@Override
-	public void createAll() {
-		createAll("");
+	public void destroyAll(boolean areDirs) {
+		for (Path directory : things) {
+			directory.toFile().delete();
+		}
 	}
 	
-	@Override
-	public void destroyAll() {
-		destroyAll("");
-	}
-	
-	public static void create(Path path, String permissions) {
+	public static void create(Path path, boolean isDir) {
 		if(!Files.exists(path)){
 			try {
-				Files.createFile(path).toFile();
-				/*dir.setExecutable(true, false);
-				dir.setReadable(true, false);
-				dir.setWritable(true, false);*/
+				File file = null;
+				if (isDir) {
+					file = Files.createDirectory(path).toFile();
+				}else{
+					file = Files.createFile(path).toFile();
+				}
+				file.setReadable(true, false);
+				file.setWritable(true, false);
+				file.setExecutable(false, true);
 			}catch(IOException e) {
 				e.printStackTrace();
 			}

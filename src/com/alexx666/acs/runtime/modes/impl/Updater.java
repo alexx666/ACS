@@ -7,7 +7,7 @@ public class Updater extends Mode {
 
 	@Override
 	public void run() {
-		processManager.createAll();
+		processManager.createAll(true);
 	}
 
 	@Override

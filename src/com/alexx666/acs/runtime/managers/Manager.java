@@ -13,6 +13,6 @@ public abstract class Manager<T> {
 		this.things = things;
 	}
 		
-	public abstract void createAll();
-	public abstract void destroyAll();
+	public abstract void createAll(boolean attr);
+	public abstract void destroyAll(boolean attr);
 }

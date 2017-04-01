@@ -1,11 +1,11 @@
 suricata: 
-    inet: eth0
+    inet: eth1
     yaml: /etc/suricata/suricata.yaml
     rules: /etc/suricata/rules
     fast: /var/log/suricata/fast.log
 
 trackers:
-    inet: eth0
+    inet: eth1
     logs: /var/log
     db: cxtracker
     type: mysql

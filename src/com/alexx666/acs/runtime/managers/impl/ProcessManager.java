@@ -37,35 +37,23 @@ public class ProcessManager extends Manager<ExternalProcess> {
 		}else if(verbose) System.out.println("[acs] " + process.getAlias() + " is not running");
 	}
 
+	@Override
 	public void createAll(boolean verbose) {
 		if(things.length != 0) {
 			System.out.println("[acs] Inicializing tools...");
 			for (ExternalProcess process : things) {
-				if(!isActive(process)) {
-					create(process, verbose);
-				}else if(verbose) System.out.println("[acs]  " + process.getAlias() + " is already running");
+				create(process, verbose);
 			}
 		}
 	}
 	
+	@Override
 	public void destroyAll(boolean verbose) {
 		if(things.length != 0) {
 			for (ExternalProcess process : things) {
-				if(isActive(process)) {
-					destroy(process, verbose);
-				}else if(verbose) System.out.println("[acs] " + process.getAlias() + "  was not running");
+				destroy(process, verbose);
 			}
 		}
-	}
-	
-	@Override
-	public void createAll() {
-		createAll(false);
-	}
-
-	@Override
-	public void destroyAll() {
-		destroyAll(false);
 	}
 	
 	private static boolean isActive(ExternalProcess process) {

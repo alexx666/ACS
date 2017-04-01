@@ -1,13 +1,17 @@
 package com.alexx666.acs.runtime.modes.impl;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import com.alexx666.acs.data.dto.ExternalProcess;
+import com.alexx666.acs.runtime.managers.impl.FileManager;
 import com.alexx666.acs.runtime.modes.Mode;
 
 public class Profiler extends Mode {
 
 	@Override
 	public void run() {
-		processManager.createAll();
+		processManager.createAll(true);
 		System.out.println("[acs] Profiling network traffic...");
 		while(running);
 	}
@@ -30,6 +34,15 @@ public class Profiler extends Mode {
 
 	@Override
 	public void manageIO() {
-		// TODO Auto-generated method stub
+		//Paths
+		Path cxtracker = Paths.get(settings.getTrackers().getLogs() + "/cxtracker");
+		Path eth = Paths.get(settings.getTrackers().getLogs() + "/cxtracker/" + settings.getTrackers().getInet());
+		Path sessions = Paths.get(settings.getTrackers().getLogs() + "/cxtracker/" + settings.getTrackers().getInet() + "/sessions");
+		Path failed = Paths.get(settings.getTrackers().getLogs() + "/cxtracker/" + settings.getTrackers().getInet() + "/sessions/failed");
+
+		//Tracker Directories
+		FileManager dm = new FileManager();
+		dm.set(cxtracker, eth, sessions, failed);
+		dm.createAll(true);
 	}
 }
