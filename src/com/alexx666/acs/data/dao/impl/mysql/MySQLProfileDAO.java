@@ -63,7 +63,7 @@ public class MySQLProfileDAO implements ProfileDAO {
 		    }
 		    stmt.close();
 		}catch (SQLException ex){ 
-			System.out.println("SQLException: " + ex.getMessage()); 
+			System.out.println("[acs] Error: Unable to obtain profile data."); 
 		}finally{
     		JDBCConnectionPool.getInstance().checkIn(connection);
 		}
@@ -106,7 +106,7 @@ public class MySQLProfileDAO implements ProfileDAO {
 		    }
 		    stmt.close();
 		}catch (SQLException ex){ 
-			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("[acs] Error: No profile data avaliable for today. Gather data by running 'profiler' mode.");
 		}finally{
     		JDBCConnectionPool.getInstance().checkIn(connection);
 		}
@@ -134,7 +134,7 @@ public class MySQLProfileDAO implements ProfileDAO {
 		    }
 		    stmt.close();
 		}catch (SQLException ex){ 
-			System.out.println(ex.getMessage());
+			System.out.println("[acs] Error: Unable to obtain profile data.");
 		}finally{
     		JDBCConnectionPool.getInstance().checkIn(connection);
 		}

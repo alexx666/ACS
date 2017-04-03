@@ -1,11 +1,11 @@
 suricata: 
-    inet: eth1
+    inet: eth0
     yaml: /etc/suricata/suricata.yaml
     rules: /etc/suricata/rules
     fast: /var/log/suricata/fast.log
 
 trackers:
-    inet: eth1
+    inet: eth0
     logs: /var/log
     db: cxtracker
     type: mysql
@@ -13,5 +13,5 @@ trackers:
     pass: cxtracker
 
 outputs:
-    file: /home/nids-linux/acs.log
+    file: /var/log/acs
     append: no

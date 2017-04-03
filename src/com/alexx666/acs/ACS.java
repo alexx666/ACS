@@ -1,5 +1,7 @@
 package com.alexx666.acs;
 
+import java.io.FileNotFoundException;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -7,8 +9,11 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.alexx666.acs.runtime.modes.InvalidModeException;
 import com.alexx666.acs.runtime.modes.Mode;
 import com.alexx666.acs.runtime.modes.ModeFactory;
+
+import net.sourceforge.yamlbeans.YamlException;
 
 /**
  * 
@@ -37,16 +42,26 @@ public class ACS {
 			if (cmd.hasOption("f") && cmd.hasOption("m")) {
 				Mode rm = ModeFactory.getConfiguration(cmd.getOptionValue("m"));
 				rm.setSettingsFromFile(cmd.getOptionValue("f"));
-				rm.manageIO();
-				rm.setExternalProcess();
 				rm.run();
 			}else{
+				System.out.println("[acs] WARNING: Please indicate config file and a mode of execution. Options 'f' and 'm' are mendatory.");
 				formatter.printHelp("acs [option]", options);
 			}
-		}catch (ParseException | NullPointerException e) {
-			e.printStackTrace();
+		}catch (ParseException e) {
+			System.out.println("[acs] Error parsing input variables.");
 			formatter.printHelp("acs [option]", options);
-		}
+		}catch (FileNotFoundException e) {
+			System.out.println("[acs] Error: File not found!");
+			formatter.printHelp("acs [option]", options);
+		}catch (YamlException e) {
+			System.out.println("[acs] Error while reading file!");
+			formatter.printHelp("acs [option]", options);
+		}catch (InvalidModeException e) {
+			System.out.println("[acs] Error: Invalid mode!");
+			formatter.printHelp("acs [option]", options);
+		}catch (NullPointerException e) {
+			System.out.println("[acs] Error: Unable to calculate anomaly.");			
+		} 
 	}
 	
 	public static void main(String[] args) { (new ACS()).start(args); }

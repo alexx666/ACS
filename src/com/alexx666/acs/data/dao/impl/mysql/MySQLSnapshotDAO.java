@@ -56,7 +56,7 @@ public class MySQLSnapshotDAO implements SnapshotDAO {
 		    }
     		stmt.close();
 		}catch (SQLException ex){ 
-			System.out.println("SQLException: " + ex.getMessage()); 
+			System.out.println("[acs] Error extracting snapshot!");
 		}finally{
     		JDBCConnectionPool.getInstance().checkIn(connection);
 		}
@@ -80,7 +80,7 @@ public class MySQLSnapshotDAO implements SnapshotDAO {
 		    }
 	    	stmt.close();
 		}catch (SQLException ex){ 
-			System.out.println("SQLException: " + ex.getMessage()); 
+			System.out.println("[acs] Error extracting snapshot!");
 		}finally{
     		JDBCConnectionPool.getInstance().checkIn(connection);
 		}

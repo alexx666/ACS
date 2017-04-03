@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Calendar;
 
 import com.alexx666.acs.data.dao.connection.impl.JDBCConnectionPool;
 import com.alexx666.acs.data.dto.Alert;
@@ -18,6 +19,8 @@ import com.alexx666.acs.runtime.modes.Mode;
 
 public class Monitor extends Mode {
 	
+	private String dumpfile;
+	
 	@Override
 	public void run() {
 		
@@ -26,7 +29,7 @@ public class Monitor extends Mode {
 		JDBCConnectionPool.getInstance().setPwd(settings.getTrackers().getPass());
 			
 		AlertSubject as = new AlertSubject();
-		new AlertObserver(as, processManager.get()[2], settings.getOutputs().getFile(), settings.getOutputs().shouldAppend(), settings.getTrackers().getType());
+		new AlertObserver(as, processManager.get()[2], dumpfile, settings.getOutputs().shouldAppend(), settings.getTrackers().getType());
 						
 		processManager.createAll(true);
 		
@@ -79,8 +82,11 @@ public class Monitor extends Mode {
 
 	@Override
 	public void manageIO() {
-		//Paths
-		Path outputFile = Paths.get(settings.getOutputs().getFile());
+		dumpfile = settings.getOutputs().getFile() + "/acs_" + Calendar.getInstance().getTimeInMillis() + ".log";
+
+		//Paths		
+		Path outputFile = Paths.get(dumpfile);
+		Path outputDir = Paths.get(settings.getOutputs().getFile());
 		Path prads = Paths.get(settings.getTrackers().getLogs() + "/prads");
 		Path eth = Paths.get(settings.getTrackers().getLogs() + "/prads/" + settings.getTrackers().getInet());
 		Path sessions = Paths.get(settings.getTrackers().getLogs() + "/prads/" + settings.getTrackers().getInet() + "/sessions");
@@ -88,7 +94,7 @@ public class Monitor extends Mode {
 
 		//Tracker Directories
 		FileManager fm = new FileManager();
-		fm.set(prads, eth, sessions, failed);
+		fm.set(prads, eth, sessions, failed, outputDir);
 		fm.createAll(true);
 		
 		//Output File

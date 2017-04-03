@@ -11,8 +11,3 @@ A small program that listens to a NIDS (Currently supports Suricata) and calcula
  - Alert monitorization with Suricata and PRADS
  - Network profiling using Cxtracker
  - IDS rule updating via Oinkmaster
-
-# Pending:
-
- - Installation of 3rd party software
- - Output configuration

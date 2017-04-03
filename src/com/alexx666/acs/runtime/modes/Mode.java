@@ -27,7 +27,9 @@ public abstract class Mode {
 					lock.notifyAll();
 				}
 				mainThread.join();
-			}catch (InterruptedException e) { e.printStackTrace(); }					
+			}catch (InterruptedException e) {
+				e.printStackTrace(); 
+			}					
 		}
 	});
 	
@@ -35,16 +37,14 @@ public abstract class Mode {
 		Runtime.getRuntime().addShutdownHook(shutdownhook);
 	}
 	
-	public void setSettingsFromFile(String filePath) {
-		try {
-			YamlReader reader = new YamlReader(new FileReader(filePath));
-			this.settings = reader.read(Settings.class);
-		} catch (FileNotFoundException | YamlException e) {
-			System.out.println("[acs] Error: Invalid file!");
-		}
+	public void setSettingsFromFile(String filePath) throws FileNotFoundException, YamlException {
+		YamlReader reader = new YamlReader(new FileReader(filePath));
+		this.settings = reader.read(Settings.class);
+		manageIO();
+		setExternalProcess();
 	}
 	
-	public abstract void setExternalProcess();
-	public abstract void manageIO();
+	protected abstract void setExternalProcess();
+	protected abstract void manageIO();
 	public abstract void run();
 }

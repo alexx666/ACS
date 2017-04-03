@@ -6,12 +6,12 @@ import com.alexx666.acs.runtime.modes.impl.Updater;
 
 public class ModeFactory {
 	
-	public static Mode getConfiguration(String mode) throws NullPointerException {
+	public static Mode getConfiguration(String mode) throws InvalidModeException {
 		switch (mode) {
 		case "monitor": return new Monitor();
 		case "profiler": return new Profiler();
 		case "updater": return new Updater();
-		default: throw new NullPointerException();
+		default: throw new InvalidModeException();
 		}
 	}
 }
