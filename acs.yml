@@ -13,5 +13,5 @@ trackers:
     pass: cxtracker
 
 outputs:
-    file: /home/nids-linux/acs.log
+    file: /var/log/acs
     append: no

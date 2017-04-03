@@ -33,7 +33,7 @@ snapshot2db.pl - Load session metadata from cxtracker into a db
  --hostname     : specify the hostname
  --debug        : enable debug messages (default: 0 (disabled))
  --help         : this help message
- --version      : show cxtracker2db.pl version
+ --version      : show version
  --format       : "indexed" or "standard" database format
 
 =cut
@@ -48,8 +48,8 @@ our $TIMEOUT       = 2;
 our $HOSTNAME      = hostname;
 my  $SDIR          = "";
 my  $FDIR          = "";
-my  $LOGFILE       = q(/var/log/cxtracker2db.log);
-my  $PIDFILE       = q(/var/run/cxtracker2db.pid);
+my  $LOGFILE       = q(/var/log/snapshot2db.log);
+my  $PIDFILE       = q(/var/run/snapshot2db.pid);
 our $DB_NAME       = "cxtracker";
 our $DB_HOST       = "127.0.0.1";
 our $DB_PORT       = "3306";
@@ -621,7 +621,7 @@ sub new_session_table {
 sub find_session_tables {
    my ($sql, $sth);
    my $tables = q();
-   $sql = q(SHOW TABLES LIKE 'session_%');
+   $sql = q(SHOW TABLES LIKE 'snapshot_session%');
    $sth = $dbh->prepare($sql);
    $sth->execute;
    while (my @array = $sth->fetchrow_array) {
