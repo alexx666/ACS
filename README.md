@@ -4,10 +4,14 @@ ACS is still in early development and lacks features like and installation mecha
 
 # Description:
 
-A small program that listens to a NIDS (Currently supports Suricata) and calculates in real time the network anomaly of the network traffic. ACS integrates Cxtracker and PRADS for network profiling and context, Suricata as a network intrusion detection system and oinkmaster as a rule updating tool.
+A small program that listens to a NIDS (Currently supports only Suricata) and calculates in real time the network anomaly of the network traffic. ACS integrates Cxtracker and PRADS for network profiling and context, Suricata as a network intrusion detection system and Oinkmaster as a rule updating tool.
 
 # Features:
 
- - Alert monitorization with Suricata and PRADS
- - Network profiling using Cxtracker
- - IDS rule updating via Oinkmaster
+ - Alert monitoring
+ - Network profiling
+ - IDS rule updating
+ 
+# Pending:
+
+ - 3rd party installation script. Currently ACS will not work without Suricata, Cxtracker, Oinkmaster and PRADS being correctly installed and configured.

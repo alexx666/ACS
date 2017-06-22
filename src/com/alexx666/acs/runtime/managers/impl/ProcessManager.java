@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.alexx666.acs.data.dto.ExternalProcess;
+import com.alexx666.acs.data.dto.config.ExternalProcess;
 import com.alexx666.acs.runtime.managers.Manager;
 
 public class ProcessManager extends Manager<ExternalProcess> {

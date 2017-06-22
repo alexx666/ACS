@@ -2,7 +2,7 @@ package com.alexx666.acs.data.dao;
 
 import java.util.Date;
 
-import com.alexx666.acs.data.dto.Statistics;
+import com.alexx666.acs.data.dto.traffic.Statistics;
 
 public interface ProfileDAO {
 	public Statistics getFullProfile(Date hour);

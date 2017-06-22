@@ -10,8 +10,8 @@ import java.util.List;
 import com.alexx666.acs.data.dao.ProfileDAO;
 import com.alexx666.acs.data.dao.connection.impl.JDBCConnectionPool;
 import com.alexx666.acs.data.dao.factory.impl.MySQLDAOFactory;
-import com.alexx666.acs.data.dto.Flow;
-import com.alexx666.acs.data.dto.Statistics;
+import com.alexx666.acs.data.dto.traffic.Flow;
+import com.alexx666.acs.data.dto.traffic.Statistics;
 import com.alexx666.acs.utils.formatters.Dates;
 import com.mysql.jdbc.Connection;
 

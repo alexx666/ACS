@@ -1,4 +1,4 @@
-package com.alexx666.acs.data.dto;
+package com.alexx666.acs.data.dto.config;
 
 public class Outputs {
 	private String file;

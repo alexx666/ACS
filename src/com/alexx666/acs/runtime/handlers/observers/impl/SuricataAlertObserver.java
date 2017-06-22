@@ -1,4 +1,4 @@
-package com.alexx666.acs.runtime.handlers;
+package com.alexx666.acs.runtime.handlers.observers.impl;
 
 import java.io.IOException;
 import java.util.Date;
@@ -9,10 +9,12 @@ import java.util.logging.SimpleFormatter;
 import com.alexx666.acs.data.dao.ProfileDAO;
 import com.alexx666.acs.data.dao.SnapshotDAO;
 import com.alexx666.acs.data.dao.factory.DAOFactory;
-import com.alexx666.acs.data.dto.Alert;
-import com.alexx666.acs.data.dto.Anomaly;
-import com.alexx666.acs.data.dto.ExternalProcess;
-import com.alexx666.acs.data.dto.Statistics;
+import com.alexx666.acs.data.dto.alerts.Alert;
+import com.alexx666.acs.data.dto.config.ExternalProcess;
+import com.alexx666.acs.data.dto.traffic.Anomaly;
+import com.alexx666.acs.data.dto.traffic.Statistics;
+import com.alexx666.acs.runtime.handlers.observers.AlertObserver;
+import com.alexx666.acs.runtime.handlers.subjects.AlertSubject;
 import com.alexx666.acs.runtime.managers.impl.ProcessManager;
 
 /**
@@ -20,7 +22,7 @@ import com.alexx666.acs.runtime.managers.impl.ProcessManager;
  * @author alexx666
  *
  */
-public class AlertObserver {
+public class SuricataAlertObserver implements AlertObserver {
 	
 	private static final Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
 	private static final SimpleFormatter FORMATTER = new SimpleFormatter();
@@ -34,7 +36,7 @@ public class AlertObserver {
 	private Statistics profile;
 	private Statistics snapshot;
 	
-	public AlertObserver(AlertSubject subject, ExternalProcess process, String dumpFile, boolean append, String dataSource) {
+	public SuricataAlertObserver(AlertSubject subject, ExternalProcess process, String dumpFile, boolean append, String dataSource) {
 		this.subject = subject;
 		this.subject.addObserver(this);
 		this.profileDao = DAOFactory.getDAOFactory(dataSource).getProfileDAO();
@@ -53,6 +55,7 @@ public class AlertObserver {
 		}
 	}
 
+	@Override
 	public void update() {
 		if (oldAlert == null || subject.getAlert().getHour().toString() != oldAlert.getHour().toString()) {
 			ProcessManager.destroy(process, false);
@@ -62,7 +65,7 @@ public class AlertObserver {
 			}
 			if (snapshotDao.isSnapshotReady(subject.getAlert().getHour())) { 
 				snapshot = snapshotDao.getSnapshot(subject.getAlert().getHour()); 
-			} //TODO Attempt threading both profile and snapshot extraction
+			}
 				
 			oldAnomaly = new Anomaly(profile, snapshot);
 								

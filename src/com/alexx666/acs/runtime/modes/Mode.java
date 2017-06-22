@@ -3,7 +3,7 @@ package com.alexx666.acs.runtime.modes;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import com.alexx666.acs.data.dto.Settings;
+import com.alexx666.acs.data.dto.config.Settings;
 import com.alexx666.acs.runtime.managers.impl.ProcessManager;
 
 import net.sourceforge.yamlbeans.YamlException;

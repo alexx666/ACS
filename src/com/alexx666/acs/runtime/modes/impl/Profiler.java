@@ -3,7 +3,7 @@ package com.alexx666.acs.runtime.modes.impl;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.alexx666.acs.data.dto.ExternalProcess;
+import com.alexx666.acs.data.dto.config.ExternalProcess;
 import com.alexx666.acs.runtime.managers.impl.FileManager;
 import com.alexx666.acs.runtime.modes.Mode;
 

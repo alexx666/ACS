@@ -1,21 +1,21 @@
-package com.alexx666.acs.data.dto;
+package com.alexx666.acs.data.dto.alerts.impl;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import com.alexx666.acs.data.dto.alerts.Alert;
 
 /**
  * 
  * @author alexx666
  *
  */
-public class Alert {
-
-	private String line;
+public class SuricataAlert extends Alert {
 	
-	public Alert(String line) {	this.line = line; }
+	public SuricataAlert(String line) { super(line); }
 
 	public String getMessage() {
-		String[] components = line.split("[**]"); //TODO mejorar
+		String[] components = line.split("[**]"); //TODO improve
 		return components[2];
 	}
 	
