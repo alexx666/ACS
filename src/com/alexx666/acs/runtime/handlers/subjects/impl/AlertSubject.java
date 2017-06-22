@@ -3,20 +3,20 @@ package com.alexx666.acs.runtime.handlers.subjects.impl;
 import java.util.ArrayList;
 
 import com.alexx666.acs.data.dto.alerts.Alert;
-import com.alexx666.acs.runtime.handlers.observers.AlertObserver;
-import com.alexx666.acs.runtime.handlers.subjects.AlertSubject;
+import com.alexx666.acs.runtime.handlers.observers.Observer;
+import com.alexx666.acs.runtime.handlers.subjects.Subject;
 
 /**
  * 
  * @author alexx666
  *
  */
-public class SuricataAlertSubject implements AlertSubject {
+public class AlertSubject implements Subject {
 	
-	private ArrayList<AlertObserver> observers;
+	private ArrayList<Observer> observers;
 	private Alert alert; 
 	
-	public SuricataAlertSubject() {	this.observers = new ArrayList<AlertObserver>(); }
+	public AlertSubject() {	this.observers = new ArrayList<Observer>(); }
 	
 	@Override
 	public Alert getAlert() { return alert;	}
@@ -28,13 +28,13 @@ public class SuricataAlertSubject implements AlertSubject {
 	}
 
 	@Override
-	public void addObserver(AlertObserver newObserver) {
+	public void addObserver(Observer newObserver) {
 		observers.add(newObserver);
 	}
 
 	@Override
 	public void notifyObservers() {
-		for (AlertObserver observer : observers) {
+		for (Observer observer : observers) {
 			observer.update();
 		}
 	}
