@@ -13,8 +13,8 @@ import com.alexx666.acs.data.dto.alerts.Alert;
 import com.alexx666.acs.data.dto.config.ExternalProcess;
 import com.alexx666.acs.data.dto.traffic.Anomaly;
 import com.alexx666.acs.data.dto.traffic.Statistics;
-import com.alexx666.acs.runtime.handlers.observers.AlertObserver;
-import com.alexx666.acs.runtime.handlers.subjects.AlertSubject;
+import com.alexx666.acs.runtime.handlers.observers.Observer;
+import com.alexx666.acs.runtime.handlers.subjects.Subject;
 import com.alexx666.acs.runtime.managers.impl.ProcessManager;
 
 /**
@@ -22,12 +22,12 @@ import com.alexx666.acs.runtime.managers.impl.ProcessManager;
  * @author alexx666
  *
  */
-public class SuricataAlertObserver implements AlertObserver {
+public class AlertObserver implements Observer {
 	
 	private static final Logger LOGGER = Logger.getLogger(Thread.currentThread().getStackTrace()[0].getClassName());
 	private static final SimpleFormatter FORMATTER = new SimpleFormatter();
 	
-	private AlertSubject subject;
+	private Subject subject;
 	private Alert oldAlert;
 	private ExternalProcess process;
 	private Anomaly oldAnomaly;
@@ -36,7 +36,7 @@ public class SuricataAlertObserver implements AlertObserver {
 	private Statistics profile;
 	private Statistics snapshot;
 	
-	public SuricataAlertObserver(AlertSubject subject, ExternalProcess process, String dumpFile, boolean append, String dataSource) {
+	public AlertObserver(Subject subject, ExternalProcess process, String dumpFile, boolean append, String dataSource) {
 		this.subject = subject;
 		this.subject.addObserver(this);
 		this.profileDao = DAOFactory.getDAOFactory(dataSource).getProfileDAO();

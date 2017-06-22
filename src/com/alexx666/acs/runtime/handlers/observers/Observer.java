@@ -1,5 +1,5 @@
 package com.alexx666.acs.runtime.handlers.observers;
 
-public interface AlertObserver {
+public interface Observer {
 	public void update();
 }

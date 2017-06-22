@@ -11,8 +11,8 @@ import java.util.Calendar;
 import com.alexx666.acs.data.dao.connection.impl.JDBCConnectionPool;
 import com.alexx666.acs.data.dto.alerts.impl.SuricataAlert;
 import com.alexx666.acs.data.dto.config.ExternalProcess;
-import com.alexx666.acs.runtime.handlers.observers.impl.SuricataAlertObserver;
-import com.alexx666.acs.runtime.handlers.subjects.impl.SuricataAlertSubject;
+import com.alexx666.acs.runtime.handlers.observers.impl.AlertObserver;
+import com.alexx666.acs.runtime.handlers.subjects.impl.AlertSubject;
 import com.alexx666.acs.runtime.managers.impl.FileManager;
 import com.alexx666.acs.runtime.managers.impl.ProcessManager;
 import com.alexx666.acs.runtime.modes.Mode;
@@ -28,8 +28,8 @@ public class Monitor extends Mode {
 		JDBCConnectionPool.getInstance().setUsr(settings.getTrackers().getUser());
 		JDBCConnectionPool.getInstance().setPwd(settings.getTrackers().getPass());
 			
-		SuricataAlertSubject as = new SuricataAlertSubject();
-		new SuricataAlertObserver(as, processManager.get()[2], dumpfile, settings.getOutputs().shouldAppend(), settings.getTrackers().getType());
+		AlertSubject as = new AlertSubject();
+		new AlertObserver(as, processManager.get()[2], dumpfile, settings.getOutputs().shouldAppend(), settings.getTrackers().getType());
 						
 		processManager.createAll(true);
 		
