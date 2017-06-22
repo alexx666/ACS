@@ -1,4 +1,4 @@
-package com.alexx666.acs.data.dto;
+package com.alexx666.acs.data.dto.traffic;
 
 /**
  * 

@@ -1,6 +1,6 @@
 package com.alexx666.acs.runtime.modes.impl;
 
-import com.alexx666.acs.data.dto.ExternalProcess;
+import com.alexx666.acs.data.dto.config.ExternalProcess;
 import com.alexx666.acs.runtime.modes.Mode;
 
 public class Updater extends Mode {
