@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.db.dto.traffic;
+package com.alexx666.acs.db.dto.traffic;
 
 /**
  * 

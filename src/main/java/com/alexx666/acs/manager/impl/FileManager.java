@@ -1,11 +1,11 @@
-package main.java.com.alexx666.acs.manager.impl;
+package com.alexx666.acs.manager.impl;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import main.java.com.alexx666.acs.manager.Manager;
+import com.alexx666.acs.manager.Manager;
 
 public class FileManager extends Manager<Path> {
 		

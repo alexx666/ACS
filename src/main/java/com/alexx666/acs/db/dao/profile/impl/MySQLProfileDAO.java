@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.db.dao.profile.impl;
+package com.alexx666.acs.db.dao.profile.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,12 +9,12 @@ import java.util.List;
 
 import com.mysql.jdbc.Connection;
 
-import main.java.com.alexx666.acs.db.connection.impl.JDBCConnectionPool;
-import main.java.com.alexx666.acs.db.dao.profile.ProfileDAO;
-import main.java.com.alexx666.acs.db.dto.traffic.Flow;
-import main.java.com.alexx666.acs.db.dto.traffic.Statistics;
-import main.java.com.alexx666.acs.db.factory.impl.MySQLDAOFactory;
-import main.java.com.alexx666.acs.util.DateFormatters;
+import com.alexx666.acs.db.connection.impl.JDBCConnectionPool;
+import com.alexx666.acs.db.dao.profile.ProfileDAO;
+import com.alexx666.acs.db.dto.traffic.Flow;
+import com.alexx666.acs.db.dto.traffic.Statistics;
+import com.alexx666.acs.db.factory.impl.MySQLDAOFactory;
+import com.alexx666.acs.util.DateFormatters;
 
 /**
  * 

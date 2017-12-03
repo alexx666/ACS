@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.configuration.impl;
+package com.alexx666.acs.configuration.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,14 +8,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
 
-import main.java.com.alexx666.acs.configuration.Mode;
-import main.java.com.alexx666.acs.db.connection.impl.JDBCConnectionPool;
-import main.java.com.alexx666.acs.db.dto.alerts.impl.SuricataAlert;
-import main.java.com.alexx666.acs.db.dto.config.ExternalProcess;
-import main.java.com.alexx666.acs.manager.impl.FileManager;
-import main.java.com.alexx666.acs.manager.impl.ProcessManager;
-import main.java.com.alexx666.acs.observer.impl.AlertObserver;
-import main.java.com.alexx666.acs.subject.impl.AlertSubject;
+import com.alexx666.acs.configuration.Mode;
+import com.alexx666.acs.db.connection.impl.JDBCConnectionPool;
+import com.alexx666.acs.db.dto.alerts.impl.SuricataAlert;
+import com.alexx666.acs.db.dto.config.ExternalProcess;
+import com.alexx666.acs.manager.impl.FileManager;
+import com.alexx666.acs.manager.impl.ProcessManager;
+import com.alexx666.acs.observer.impl.AlertObserver;
+import com.alexx666.acs.subject.impl.AlertSubject;
 
 public class Monitor extends Mode {
 	

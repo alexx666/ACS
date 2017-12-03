@@ -1,7 +1,7 @@
-package main.java.com.alexx666.acs.configuration.impl;
+package com.alexx666.acs.configuration.impl;
 
-import main.java.com.alexx666.acs.configuration.Mode;
-import main.java.com.alexx666.acs.db.dto.config.ExternalProcess;
+import com.alexx666.acs.configuration.Mode;
+import com.alexx666.acs.db.dto.config.ExternalProcess;
 
 public class Updater extends Mode {
 

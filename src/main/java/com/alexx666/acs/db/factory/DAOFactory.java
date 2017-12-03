@@ -1,8 +1,8 @@
-package main.java.com.alexx666.acs.db.factory;
+package com.alexx666.acs.db.factory;
 
-import main.java.com.alexx666.acs.db.dao.profile.ProfileDAO;
-import main.java.com.alexx666.acs.db.dao.snapshot.SnapshotDAO;
-import main.java.com.alexx666.acs.db.factory.impl.MySQLDAOFactory;
+import com.alexx666.acs.db.dao.profile.ProfileDAO;
+import com.alexx666.acs.db.dao.snapshot.SnapshotDAO;
+import com.alexx666.acs.db.factory.impl.MySQLDAOFactory;
 
 public abstract class DAOFactory {
 		

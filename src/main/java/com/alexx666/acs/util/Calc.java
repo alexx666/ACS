@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.util;
+package com.alexx666.acs.util;
 
 import java.util.List;
 

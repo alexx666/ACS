@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.manager;
+package com.alexx666.acs.manager;
 
 public abstract class Manager<T> {
 

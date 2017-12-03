@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.manager.impl;
+package com.alexx666.acs.manager.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.alexx666.acs.db.dto.config.ExternalProcess;
-import main.java.com.alexx666.acs.manager.Manager;
+import com.alexx666.acs.db.dto.config.ExternalProcess;
+import com.alexx666.acs.manager.Manager;
 
 public class ProcessManager extends Manager<ExternalProcess> {
 		

@@ -1,9 +1,9 @@
-package main.java.com.alexx666.acs.db.dto.alerts.impl;
+package com.alexx666.acs.db.dto.alerts.impl;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import main.java.com.alexx666.acs.db.dto.alerts.Alert;
+import com.alexx666.acs.db.dto.alerts.Alert;
 
 /**
  * 

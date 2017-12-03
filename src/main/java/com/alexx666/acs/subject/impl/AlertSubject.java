@@ -1,10 +1,10 @@
-package main.java.com.alexx666.acs.subject.impl;
+package com.alexx666.acs.subject.impl;
 
 import java.util.ArrayList;
 
-import main.java.com.alexx666.acs.db.dto.alerts.Alert;
-import main.java.com.alexx666.acs.observer.Observer;
-import main.java.com.alexx666.acs.subject.Subject;
+import com.alexx666.acs.db.dto.alerts.Alert;
+import com.alexx666.acs.observer.Observer;
+import com.alexx666.acs.subject.Subject;
 
 /**
  * 

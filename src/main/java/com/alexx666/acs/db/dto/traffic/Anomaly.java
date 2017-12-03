@@ -1,9 +1,9 @@
-package main.java.com.alexx666.acs.db.dto.traffic;
+package com.alexx666.acs.db.dto.traffic;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.alexx666.acs.util.Calc;
+import com.alexx666.acs.util.Calc;
 
 /**
  * 

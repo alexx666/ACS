@@ -1,10 +1,10 @@
-package main.java.com.alexx666.acs.configuration;
+package com.alexx666.acs.configuration;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import main.java.com.alexx666.acs.db.dto.config.Settings;
-import main.java.com.alexx666.acs.manager.impl.ProcessManager;
+import com.alexx666.acs.db.dto.config.Settings;
+import com.alexx666.acs.manager.impl.ProcessManager;
 import net.sourceforge.yamlbeans.YamlException;
 import net.sourceforge.yamlbeans.YamlReader;
 

@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.error;
+package com.alexx666.acs.error;
 
 public class InvalidModeException extends Exception {
 	

@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.observer.impl;
+package com.alexx666.acs.observer.impl;
 
 import java.io.IOException;
 import java.util.Date;
@@ -6,16 +6,16 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import main.java.com.alexx666.acs.db.dao.profile.ProfileDAO;
-import main.java.com.alexx666.acs.db.dao.snapshot.SnapshotDAO;
-import main.java.com.alexx666.acs.db.dto.alerts.Alert;
-import main.java.com.alexx666.acs.db.dto.config.ExternalProcess;
-import main.java.com.alexx666.acs.db.dto.traffic.Anomaly;
-import main.java.com.alexx666.acs.db.dto.traffic.Statistics;
-import main.java.com.alexx666.acs.db.factory.DAOFactory;
-import main.java.com.alexx666.acs.manager.impl.ProcessManager;
-import main.java.com.alexx666.acs.observer.Observer;
-import main.java.com.alexx666.acs.subject.Subject;
+import com.alexx666.acs.db.dao.profile.ProfileDAO;
+import com.alexx666.acs.db.dao.snapshot.SnapshotDAO;
+import com.alexx666.acs.db.dto.alerts.Alert;
+import com.alexx666.acs.db.dto.config.ExternalProcess;
+import com.alexx666.acs.db.dto.traffic.Anomaly;
+import com.alexx666.acs.db.dto.traffic.Statistics;
+import com.alexx666.acs.db.factory.DAOFactory;
+import com.alexx666.acs.manager.impl.ProcessManager;
+import com.alexx666.acs.observer.Observer;
+import com.alexx666.acs.subject.Subject;
 
 /**
  * 

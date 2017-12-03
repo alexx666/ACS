@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.db.connection;
+package com.alexx666.acs.db.connection;
 
 import java.util.Enumeration;
 import java.util.Hashtable;

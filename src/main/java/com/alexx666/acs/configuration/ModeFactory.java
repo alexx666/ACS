@@ -1,9 +1,9 @@
-package main.java.com.alexx666.acs.configuration;
+package com.alexx666.acs.configuration;
 
-import main.java.com.alexx666.acs.configuration.impl.Monitor;
-import main.java.com.alexx666.acs.configuration.impl.Profiler;
-import main.java.com.alexx666.acs.configuration.impl.Updater;
-import main.java.com.alexx666.acs.error.InvalidModeException;
+import com.alexx666.acs.configuration.impl.Monitor;
+import com.alexx666.acs.configuration.impl.Profiler;
+import com.alexx666.acs.configuration.impl.Updater;
+import com.alexx666.acs.error.InvalidModeException;
 
 public class ModeFactory {
 	

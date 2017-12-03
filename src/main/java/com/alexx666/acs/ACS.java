@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs;
+package com.alexx666.acs;
 
 import java.io.FileNotFoundException;
 
@@ -9,9 +9,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import main.java.com.alexx666.acs.configuration.Mode;
-import main.java.com.alexx666.acs.configuration.ModeFactory;
-import main.java.com.alexx666.acs.error.InvalidModeException;
+import com.alexx666.acs.configuration.Mode;
+import com.alexx666.acs.configuration.ModeFactory;
+import com.alexx666.acs.error.InvalidModeException;
 import net.sourceforge.yamlbeans.YamlException;
 
 /**

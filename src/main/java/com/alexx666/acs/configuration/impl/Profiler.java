@@ -1,11 +1,11 @@
-package main.java.com.alexx666.acs.configuration.impl;
+package com.alexx666.acs.configuration.impl;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import main.java.com.alexx666.acs.configuration.Mode;
-import main.java.com.alexx666.acs.db.dto.config.ExternalProcess;
-import main.java.com.alexx666.acs.manager.impl.FileManager;
+import com.alexx666.acs.configuration.Mode;
+import com.alexx666.acs.db.dto.config.ExternalProcess;
+import com.alexx666.acs.manager.impl.FileManager;
 
 public class Profiler extends Mode {
 

@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.db.dto.config;
+package com.alexx666.acs.db.dto.config;
 
 public class Suricata {
 	private String inet;

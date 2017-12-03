@@ -1,4 +1,4 @@
-package main.java.com.alexx666.acs.db.dto.alerts;
+package com.alexx666.acs.db.dto.alerts;
 
 import java.util.Date;
 
