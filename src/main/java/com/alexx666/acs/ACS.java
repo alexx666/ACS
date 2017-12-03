@@ -12,7 +12,7 @@ import org.apache.commons.cli.ParseException;
 import com.alexx666.acs.configuration.Mode;
 import com.alexx666.acs.configuration.ModeFactory;
 import com.alexx666.acs.error.InvalidModeException;
-import net.sourceforge.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.YamlException;
 
 /**
  * 

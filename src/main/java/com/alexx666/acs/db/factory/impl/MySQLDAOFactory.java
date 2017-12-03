@@ -1,6 +1,6 @@
 package com.alexx666.acs.db.factory.impl;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 
 import com.alexx666.acs.db.connection.impl.JDBCConnectionPool;
 import com.alexx666.acs.db.dao.profile.ProfileDAO;

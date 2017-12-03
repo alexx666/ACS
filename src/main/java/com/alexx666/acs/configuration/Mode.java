@@ -5,8 +5,8 @@ import java.io.FileReader;
 
 import com.alexx666.acs.db.dto.config.Settings;
 import com.alexx666.acs.manager.impl.ProcessManager;
-import net.sourceforge.yamlbeans.YamlException;
-import net.sourceforge.yamlbeans.YamlReader;
+import com.esotericsoftware.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.YamlReader;
 
 public abstract class Mode {
 	
