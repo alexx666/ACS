@@ -1,7 +1,5 @@
 package com.alexx666.acs;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,7 +26,7 @@ public class ACSUnitTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		assert(new ACS().getClass().equals(ACS.class));
 	}
 
 }
