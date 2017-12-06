@@ -8,45 +8,62 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
-  	<property name="dir.buildfile" value="."/>
-    <property name="dir.workspace" value="${dir.buildfile}/.."/>
-    <property name="dir.jarfile" value="${dir.workspace}/ACS"/>
-    <target name="create_run_jar">
-        <jar destfile="${dir.jarfile}/acs.jar" filesetmanifest="mergewithoutmain">
-            <manifest>
-                <attribute name="Main-Class" value="com.alexx666.acs.ACS"/>
-                <attribute name="Class-Path" value="."/>
-            </manifest>
-            <fileset dir="${dir.jarfile}/bin"/>
-            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/commons-cli-1.3.1.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/mysql-connector-java-5.1.39-bin.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/lib/yamlbeans-1.0.jar"/>
-        </jar>
-    </target>
+    <path id="Maven Dependencies.libraryclasspath">
+        <pathelement location="../../.m2/repository/commons-cli/commons-cli/1.3.1/commons-cli-1.3.1.jar"/>
+        <pathelement location="../../.m2/repository/mysql/mysql-connector-java/6.0.6/mysql-connector-java-6.0.6.jar"/>
+        <pathelement location="../../.m2/repository/com/esotericsoftware/yamlbeans/yamlbeans/1.12/yamlbeans-1.12.jar"/>
+    </path>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="../../.p2/pool/plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+    </path>
     <path id="ACS.classpath">
-        <pathelement location="bin"/>
-        <pathelement location="lib/commons-cli-1.3.1.jar"/>
-        <pathelement location="lib/mysql-connector-java-5.1.39-bin.jar"/>
-        <pathelement location="lib/yamlbeans-1.0.jar"/>
+        <pathelement location="target/classes"/>
+        <pathelement location="target/test-classes"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+    </path>
+    <path id="run.monitor.classpath">
+        <path refid="ACS.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.profiler.classpath">
+        <path refid="ACS.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.updater.classpath">
+        <path refid="ACS.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
     </path>
     <target name="init">
-        <mkdir dir="bin"/>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src">
+        <mkdir dir="target/classes"/>
+        <mkdir dir="target/test-classes"/>
+        <copy includeemptydirs="false" todir="target/classes">
+            <fileset dir="src/main/java">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="target/test-classes">
+            <fileset dir="src/test/java">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
     </target>
     <target name="clean">
-        <delete dir="bin"/>
+        <delete dir="target/classes"/>
+        <delete dir="target/test-classes"/>
     </target>
     <target depends="clean" name="cleanall"/>
     <target depends="build-subprojects,build-project" name="build"/>
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
-            <src path="src"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/main/java"/>
+            <classpath refid="ACS.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/test-classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/test/java"/>
             <classpath refid="ACS.classpath"/>
         </javac>
     </target>
@@ -64,9 +81,22 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="ACS Main">
+    <target name="monitor">
         <java classname="com.alexx666.acs.ACS" failonerror="true" fork="yes">
-            <classpath refid="ACS.classpath"/>
+            <arg line="-f acs.yml -m monitor"/>
+            <classpath refid="run.monitor.classpath"/>
+        </java>
+    </target>
+    <target name="profiler">
+        <java classname="com.alexx666.acs.ACS" failonerror="true" fork="yes">
+            <arg line="-f acs.yml -m profiler"/>
+            <classpath refid="run.profiler.classpath"/>
+        </java>
+    </target>
+    <target name="updater">
+        <java classname="com.alexx666.acs.ACS" failonerror="true" fork="yes">
+            <arg line="-f acs.yml -m updater"/>
+            <classpath refid="run.updater.classpath"/>
         </java>
     </target>
 </project>
