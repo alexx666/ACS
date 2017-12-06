@@ -9,8 +9,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.alexx666.acs.configuration.Mode;
-import com.alexx666.acs.configuration.ModeFactory;
+import com.alexx666.acs.configuration.ConfigurationFactory;
 import com.alexx666.acs.error.InvalidModeException;
 import com.esotericsoftware.yamlbeans.YamlException;
 
@@ -39,9 +38,10 @@ public class ACS {
 		try {
 			CommandLine cmd = parser.parse(options, args);
 			if (cmd.hasOption("f") && cmd.hasOption("m")) {
-				Mode rm = ModeFactory.getConfiguration(cmd.getOptionValue("m"));
-				rm.setSettingsFromFile(cmd.getOptionValue("f"));
-				rm.run();
+				ConfigurationFactory.getInstance()
+					.setSettingsFromFile(cmd.getOptionValue("f"));
+				ConfigurationFactory.getInstance()
+					.run(ConfigurationFactory.getConfiguration(cmd.getOptionValue("m")));
 			}else{
 				System.out.println("[acs] WARNING: Please indicate config file and a mode of execution. Options 'f' and 'm' are mendatory.");
 				formatter.printHelp("acs [option]", options);

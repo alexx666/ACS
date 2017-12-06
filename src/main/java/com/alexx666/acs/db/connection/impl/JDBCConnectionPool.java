@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.alexx666.acs.configuration.ConfigurationFactory;
 import com.alexx666.acs.db.connection.ObjectPool;
 
 /**
@@ -18,7 +19,10 @@ public class JDBCConnectionPool extends ObjectPool<Connection> {
 	private String pwd;
 	  
 	private JDBCConnectionPool() { 
-		super(); 
+		super();
+		this.dsn = "jdbc:mysql://localhost/" + ConfigurationFactory.getInstance().getSettings().getTrackers().getDb();
+		this.usr = ConfigurationFactory.getInstance().getSettings().getTrackers().getUser();
+		this.pwd = ConfigurationFactory.getInstance().getSettings().getTrackers().getPass();
 	}
 	
 	private static class Static {
@@ -28,10 +32,6 @@ public class JDBCConnectionPool extends ObjectPool<Connection> {
 	public static JDBCConnectionPool getInstance() {
 		return Static.INSTANTE;
 	}
-
-	public void setDsn(String dsn) { this.dsn = dsn; }
-	public void setUsr(String usr) { this.usr = usr; }
-	public void setPwd(String pwd) { this.pwd = pwd; }
 
 	@Override
 	protected Connection create() {

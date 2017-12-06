@@ -1,19 +1,19 @@
 package com.alexx666.acs.observer.impl;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import com.alexx666.acs.configuration.ConfigurationFactory;
 import com.alexx666.acs.db.dao.profile.ProfileDAO;
 import com.alexx666.acs.db.dao.snapshot.SnapshotDAO;
 import com.alexx666.acs.db.dto.alerts.Alert;
-import com.alexx666.acs.db.dto.config.ExternalProcess;
 import com.alexx666.acs.db.dto.traffic.Anomaly;
 import com.alexx666.acs.db.dto.traffic.Statistics;
 import com.alexx666.acs.db.factory.DAOFactory;
-import com.alexx666.acs.manager.impl.ProcessManager;
 import com.alexx666.acs.observer.Observer;
 import com.alexx666.acs.subject.Subject;
 
@@ -29,25 +29,25 @@ public class AlertObserver implements Observer {
 	
 	private Subject subject;
 	private Alert oldAlert;
-	private ExternalProcess process;
 	private Anomaly oldAnomaly;
 	private ProfileDAO profileDao;
 	private SnapshotDAO snapshotDao; 
 	private Statistics profile;
 	private Statistics snapshot;
 	
-	public AlertObserver(Subject subject, ExternalProcess process, String dumpFile, boolean append, String dataSource) {
+	public AlertObserver(Subject subject) {
 		this.subject = subject;
 		this.subject.addObserver(this);
-		this.profileDao = DAOFactory.getDAOFactory(dataSource).getProfileDAO();
-		this.snapshotDao= DAOFactory.getDAOFactory(dataSource).getSnapshotDAO();
+		this.profileDao = DAOFactory.getDAOFactory(ConfigurationFactory.getInstance().getSettings().getTrackers().getType()).getProfileDAO();
+		this.snapshotDao= DAOFactory.getDAOFactory(ConfigurationFactory.getInstance().getSettings().getTrackers().getType()).getSnapshotDAO();
 		this.profile = profileDao.getFullProfile(new Date());
 		this.snapshot = profile;
 		this.oldAnomaly = new Anomaly(profile, snapshot);
-		this.process = process;
 		
 		try {
-			FileHandler fh = new FileHandler(dumpFile, append);
+			String dumpFile = ConfigurationFactory.getInstance().getSettings().getOutputs().getFile() + 
+					"/acs_" + Calendar.getInstance().getTimeInMillis() + ".log";
+			FileHandler fh = new FileHandler(dumpFile, ConfigurationFactory.getInstance().getSettings().getOutputs().shouldAppend());
 			fh.setFormatter(FORMATTER);
 			LOGGER.addHandler(fh);
 		} catch (SecurityException | IOException e) {
@@ -58,8 +58,7 @@ public class AlertObserver implements Observer {
 	@Override
 	public void update() {
 		if (oldAlert == null || subject.getAlert().getHour().toString() != oldAlert.getHour().toString()) {
-			ProcessManager.destroy(process, false);
-			
+		
 			if (profileDao.isProfileDataEnough(subject.getAlert().getHour())) {	
 				profile = profileDao.getProfile(subject.getAlert().getHour()); 
 			}
@@ -67,10 +66,7 @@ public class AlertObserver implements Observer {
 				snapshot = snapshotDao.getSnapshot(subject.getAlert().getHour()); 
 			}
 				
-			oldAnomaly = new Anomaly(profile, snapshot);
-								
-			ProcessManager.create(process, false);
-			
+			oldAnomaly = new Anomaly(profile, snapshot);		
 		}
 		
 		LOGGER.warning(subject.getAlert().getMessage() 

@@ -8,33 +8,32 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
 
-import com.alexx666.acs.configuration.Mode;
-import com.alexx666.acs.db.connection.impl.JDBCConnectionPool;
+import com.alexx666.acs.configuration.Configuration;
+import com.alexx666.acs.configuration.ConfigurationFactory;
 import com.alexx666.acs.db.dto.alerts.impl.SuricataAlert;
 import com.alexx666.acs.db.dto.config.ExternalProcess;
-import com.alexx666.acs.manager.impl.FileManager;
 import com.alexx666.acs.manager.impl.ProcessManager;
 import com.alexx666.acs.observer.impl.AlertObserver;
+import com.alexx666.acs.subject.Subject;
 import com.alexx666.acs.subject.impl.AlertSubject;
 
-public class Monitor extends Mode {
+public class Monitor extends Configuration {
 	
-	private String dumpfile;
+	private Subject alertSubject;
+	
+	public Monitor() {
+		super();
+		this.alertSubject = new AlertSubject();
+		new AlertObserver(alertSubject);
+	}
 	
 	@Override
 	public void run() {
-		
-		JDBCConnectionPool.getInstance().setDsn("jdbc:mysql://localhost/" + settings.getTrackers().getDb());
-		JDBCConnectionPool.getInstance().setUsr(settings.getTrackers().getUser());
-		JDBCConnectionPool.getInstance().setPwd(settings.getTrackers().getPass());
-			
-		AlertSubject as = new AlertSubject();
-		new AlertObserver(as, processManager.get()[2], dumpfile, settings.getOutputs().shouldAppend(), settings.getTrackers().getType());
-						
+								
 		processManager.createAll(true);
 		
 		try {
-			File inputFile = new File(settings.getSuricata().getFast());
+			File inputFile = new File(ConfigurationFactory.getInstance().getSettings().getSuricata().getFast());
 			
 			System.out.println("[acs] Connecting to Suricata...");
 			while (inputFile.length()!=0);
@@ -46,8 +45,10 @@ public class Monitor extends Mode {
 			synchronized (lock) {
 				while (running) {
 					String line;
+					ProcessManager.create(processManager.get()[2], false);
 					if ((line = in.readLine()) != null) {
-						as.setAlert(new SuricataAlert(line));
+						ProcessManager.destroy(processManager.get()[2], false);
+						alertSubject.setAlert(new SuricataAlert(line));
 					}
 					lock.wait(10); //TODO Optimize wait time
 				}
@@ -61,44 +62,45 @@ public class Monitor extends Mode {
 	}
 
 	@Override
-	public void setExternalProcess() {
+	public void manageIO() {
+		String dumpfile = ConfigurationFactory.getInstance().getSettings().getOutputs().getFile() + 
+				"/acs_" + Calendar.getInstance().getTimeInMillis() + ".log";
+
+		//Paths		
+		Path outputFile = Paths.get(dumpfile);
+		Path outputDir = Paths.get(ConfigurationFactory.getInstance().getSettings().getOutputs().getFile());
+		
+		Path prads = Paths.get(ConfigurationFactory.getInstance().getSettings().getTrackers().getLogs() + "/prads");
+		Path pradsEth = Paths.get(prads + ConfigurationFactory.getInstance().getSettings().getTrackers().getInet());
+		Path pradsSessions = Paths.get(pradsEth + "/sessions");
+		Path pradsFailed = Paths.get(pradsSessions + "/failed");
+		
+		//Tracker Directories
+		fm.set(prads, pradsEth, pradsSessions, pradsFailed, outputDir);
+		fm.createAll(true);
+		
+		//Output File
+		fm.set(outputFile);
+		fm.createAll(false);
+	}
+
+	@Override
+	public void setExternalProcesses() {
 		String suricataCommand = "suricata -c " 
-				+ settings.getSuricata().getYaml() + " --pcap=" 
-				+ settings.getSuricata().getInet() + " -D";
+				+ ConfigurationFactory.getInstance().getSettings().getSuricata().getYaml() + " --pcap=" 
+				+ ConfigurationFactory.getInstance().getSettings().getSuricata().getInet() + " -D";
 		String snapshotCommand = "snapshot2db.pl " 
-				+ "--dir " + settings.getTrackers().getLogs() + "/prads/" 
-				+ settings.getTrackers().getInet() + "/sessions/ --daemon";
+				+ "--dir " + ConfigurationFactory.getInstance().getSettings().getTrackers().getLogs() + "/prads/" 
+				+ ConfigurationFactory.getInstance().getSettings().getTrackers().getInet() + "/sessions/ --daemon";
 		String pradsCommand = "prads -i " 
-				+ settings.getTrackers().getInet() + " -L "
-				+ settings.getTrackers().getLogs() + "/prads/"
-				+ settings.getTrackers().getInet() + "/sessions/ -D";
+				+ ConfigurationFactory.getInstance().getSettings().getTrackers().getInet() + " -L "
+				+ ConfigurationFactory.getInstance().getSettings().getTrackers().getLogs() + "/prads/"
+				+ ConfigurationFactory.getInstance().getSettings().getTrackers().getInet() + "/sessions/ -D";
 				
 		ExternalProcess suricata = new ExternalProcess("Suricata", "Suricata-Main", suricataCommand);
 		ExternalProcess snapshot = new ExternalProcess("Snapshot2DB", "snapshot2db.pl", snapshotCommand);
 		ExternalProcess prads = new ExternalProcess("PRADS", "prads", pradsCommand);
 		
 		processManager.set(suricata, snapshot, prads);
-	}
-
-	@Override
-	public void manageIO() {
-		dumpfile = settings.getOutputs().getFile() + "/acs_" + Calendar.getInstance().getTimeInMillis() + ".log";
-
-		//Paths		
-		Path outputFile = Paths.get(dumpfile);
-		Path outputDir = Paths.get(settings.getOutputs().getFile());
-		Path prads = Paths.get(settings.getTrackers().getLogs() + "/prads");
-		Path eth = Paths.get(settings.getTrackers().getLogs() + "/prads/" + settings.getTrackers().getInet());
-		Path sessions = Paths.get(settings.getTrackers().getLogs() + "/prads/" + settings.getTrackers().getInet() + "/sessions");
-		Path failed = Paths.get(settings.getTrackers().getLogs() + "/prads/" + settings.getTrackers().getInet() + "/sessions/failed");
-
-		//Tracker Directories
-		FileManager fm = new FileManager();
-		fm.set(prads, eth, sessions, failed, outputDir);
-		fm.createAll(true);
-		
-		//Output File
-		fm.set(outputFile);
-		fm.createAll(false);
 	}
 }

@@ -1,9 +1,10 @@
 package com.alexx666.acs.configuration.impl;
 
-import com.alexx666.acs.configuration.Mode;
+import com.alexx666.acs.configuration.Configuration;
+import com.alexx666.acs.configuration.ConfigurationFactory;
 import com.alexx666.acs.db.dto.config.ExternalProcess;
 
-public class Updater extends Mode {
+public class Updater extends Configuration {
 
 	@Override
 	public void run() {
@@ -11,8 +12,9 @@ public class Updater extends Mode {
 	}
 
 	@Override
-	public void setExternalProcess() {
-		String oinkmasterCommand = "oinkmaster -o " + settings.getSuricata().getRules() + " -q -s";	
+	public void setExternalProcesses() {
+		String oinkmasterCommand = "oinkmaster -o " + 
+				ConfigurationFactory.getInstance().getSettings().getSuricata().getRules() + " -q -s";	
 		
 		ExternalProcess oinkmaster = new ExternalProcess("Oinkmaster", "oinkmaster", oinkmasterCommand);
 		
