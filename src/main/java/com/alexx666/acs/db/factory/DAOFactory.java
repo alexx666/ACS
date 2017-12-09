@@ -6,13 +6,15 @@ import com.alexx666.acs.db.factory.impl.MySQLDAOFactory;
 
 public abstract class DAOFactory {
 		
-	public abstract ProfileDAO getProfileDAO();
-	public abstract SnapshotDAO getSnapshotDAO();
+	private static final MySQLDAOFactory MYSQL_DAO_FACTORY =  new MySQLDAOFactory(); 
 	
 	public static DAOFactory getDAOFactory(String dataSource) throws NullPointerException {
 		switch(dataSource) {
-		case "mysql": return new MySQLDAOFactory();
+		case "mysql": return MYSQL_DAO_FACTORY;
 		default: throw new NullPointerException();
 		}
 	}
+	
+	public abstract ProfileDAO getProfileDAO();
+	public abstract SnapshotDAO getSnapshotDAO();
 }
